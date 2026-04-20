@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI CODING AGENT WAR — Q2 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #080b0f;
+    --bg2: #0e1319;
+    --bg3: #141c25;
+    --border: #1e2d3d;
+    --accent: #00d4ff;
+    --accent2: #ff4d4d;
+    --accent3: #ffd700;
+    --muted: #5a6e82;
+    --text: #c9d6e3;
+    --text-bright: #eef3f8;
+    --green: #00ff88;
+    --orange: #ff8c00;
+    --purple: #a855f7;
+
+    --tier-s: #ffd700;
+    --tier-a: #00ff88;
+    --tier-b: #00d4ff;
+    --tier-c: #ff8c00;
+    --tier-d: #ff4d4d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINES OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.12) 2px,
+      rgba(0,0,0,0.12) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HEADER */
+  .war-header {
+    position: relative;
+    padding: 60px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: linear-gradient(180deg, #010d1a 0%, var(--bg) 100%);
+  }
+
+  .war-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .classified-stamp {
+    display: inline-block;
+    border: 3px solid var(--accent2);
+    color: var(--accent2);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    padding: 4px 16px;
+    margin-bottom: 24px;
+    transform: rotate(-1.5deg);
+    opacity: 0.9;
+  }
+
+  .war-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 10vw, 100px);
+    line-height: 0.9;
+    color: var(--text-bright);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .war-title span {
+    color: var(--accent);
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .war-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 16px;
+  }
+
+  .date-badge {
+    display: inline-block;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 12px;
+    letter-spacing: 2px;
+    margin-top: 16px;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+    line-height: 1;
+  }
+
+  /* BENCHMARK BAR */
+  .benchmark-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  .bench-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 80px;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .bench-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .bench-bar-wrap {
+    position: relative;
+    height: 24px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .bench-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--c1, #00d4ff), var(--c2, #00ff88));
+    transition: width 1s ease;
+    position: relative;
+  }
+
+  .bench-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent 60%, rgba(255,255,255,0.1));
+  }
+
+  .bench-score {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    text-align: right;
+  }
+
+  /* COMPETITOR CARDS */
+  .competitors {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .competitor-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .competitor-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--card-accent, var(--accent));
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .card-title-block {}
+
+  .card-tool-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--text-bright);
+    line-height: 1;
+  }
+
+  .card-maker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .tier-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    padding: 2px 14px;
+    border: 2px solid;
+  }
+
+  .tier-S { border-color: var(--tier-s); color: var(--tier-s); background: rgba(255,215,0,0.08); }
+  .tier-A { border-color: var(--tier-a); color: var(--tier-a); background: rgba(0,255,136,0.08); }
+  .tier-B { border-color: var(--tier-b); color: var(--tier-b); background: rgba(0,212,255,0.08); }
+  .tier-C { border-color: var(--tier-c); color: var(--tier-c); background: rgba(255,140,0,0.08); }
+
+  .price-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    letter-spacing: 1px;
+  }
+
+  .paradigm-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+  }
+
+  .card-summary {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    border-left: 2px solid var(--border);
+    padding-left: 16px;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .pros-cons { grid-template-columns: 1fr; }
+    .bench-row { grid-template-columns: 140px 1fr 60px; }
+    .card-header { flex-direction: column; }
+    .card-meta { align-items: flex-start; }
+  }
+
+  .pros, .cons {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .pc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .pros .pc-label { color: var(--green); }
+  .cons .pc-label { color: var(--accent2); }
+
+  .pc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pc-list li {
+    font-size: 13px;
+    color: var(--text);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .pros .pc-list li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
+  .cons .pc-list li::before {
+    content: '−';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
+  .verdict-strip {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,212,255,0.15);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-bright);
+    border-left: 3px solid var(--accent);
+  }
+
+  .verdict-strip strong {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .stat-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--bg);
+    white-space: nowrap;
+  }
+
+  .stat-chip span {
+    color: var(--accent3);
+    margin-left: 4px;
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 12px 10px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .compare-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    color: var(--text);
+    font-size: 11px;
+  }
+
+  .compare-table tr:hover td {
+    background: rgba(0,212,255,0.03);
+  }
+
+  .check { color: var(--green); }
+  .cross { color: var(--accent2); }
+  .partial { color: var(--orange); }
+
+  /* WINNER SECTION */
+  .winner-section {
+    background: linear-gradient(135deg, #020d15, #010a10);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 48px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .winner-section::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 400px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .winner-glyph {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(0,212,255,0.06);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    letter-spacing: 10px;
+    white-space: nowrap;
+  }
+
+  .winner-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 8px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: var(--accent);
+    letter-spacing: 6px;
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(0,212,255,0.3);
+    margin-bottom: 8px;
+  }
+
+  .winner-byline {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+  }
+
+  .winner-reasoning {
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.8;
+    text-align: left;
+  }
+
+  .winner-reasoning p + p { margin-top: 16px; }
+
+  .winner-reasoning strong {
+    color: var(--text-bright);
+  }
+
+  /* USE CASE MATRIX */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .matrix-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .matrix-card h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .matrix-winner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+
+  .matrix-reason {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* HONORABLE MENTION CARDS */
+  .mentions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .mention-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mention-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--card-accent, var(--muted));
+  }
+
+  .mention-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .mention-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .mention-body {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ANIMATE BARS ON SCROLL */
+  .bench-bar { width: 0 !important; }
+  .bench-bar.animated { width: var(--target-width) !important; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="war-header">
+  <div class="classified-stamp">BATTLE REPORT · Q2 2026</div>
+  <div class="war-title">AI CODING<br><span>AGENT WAR</span></div>
+  <div class="war-sub">10 Contenders. 1 Winner. No Mercy.</div>
+  <div class="date-badge">UPDATED APRIL 19, 2026 · RESEARCH-VERIFIED</div>
+</div>
+
+<!-- BENCHMARK OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">SWE-Bench Verified</div>
+    <div class="section-title">THE SCOREBOARD</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px;font-family:'Space Mono',monospace;line-height:1.6;">
+      SWE-Bench tests agents on real GitHub issues. Top scores exceed 80% in 2026.<br>
+      CRITICAL CAVEAT: Scaffolding matters as much as the model — same model, different agent framework = 17+ problems apart on 731 tasks.
+    </p>
+
+    <div class="benchmark-grid">
+      <div class="bench-row">
+        <div class="bench-name">Claude Code (Opus 4.6)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:80.9%;--c1:#00d4ff;--c2:#00ff88;"></div>
+        </div>
+        <div class="bench-score">80.9%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Antigravity (Gemini 3)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:76.2%;--c1:#a855f7;--c2:#00d4ff;"></div>
+        </div>
+        <div class="bench-score">76.2%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Codex CLI (GPT-5.3)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:77.3%;--c1:#ff8c00;--c2:#ffd700;"></div>
+        </div>
+        <div class="bench-score">77.3%*</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Gemini 3 Flash</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:78%;--c1:#4285f4;--c2:#34a853;"></div>
+        </div>
+        <div class="bench-score">78.0%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">GPT-5.2 (model only)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:69%;--c1:#74aa9c;--c2:#a8d8a8;"></div>
+        </div>
+        <div class="bench-score">69.0%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Cline w/ Claude Sonnet 4.5</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:80.8%;--c1:#00d4ff;--c2:#a855f7;"></div>
+        </div>
+        <div class="bench-score">80.8%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Windsurf SWE-1.5</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:40.08%;--c1:#6366f1;--c2:#a855f7;"></div>
+        </div>
+        <div class="bench-score">40.1%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Cursor (Composer 2)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:50%;--c1:#ec4899;--c2:#f97316;"></div>
+        </div>
+        <div class="bench-score">N/A*</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">GitHub Copilot (GPT-4o)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:44%;--c1:#24292e;--c2:#6e7681;"></div>
+        </div>
+        <div class="bench-score">~44%</div>
+      </div>
+      <div class="bench-row">
+        <div class="bench-name">Jules (Gemini 2.5 Pro)</div>
+        <div class="bench-bar-wrap">
+          <div class="bench-bar" style="--target-width:55%;--c1:#4285f4;--c2:#fbbc04;"></div>
+        </div>
+        <div class="bench-score">N/A*</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;">
+      * Codex CLI Terminal-Bench 2.0 score. Cursor and Jules don't publish SWE-Bench. Jules uses Gemini 2.5 Pro as base model. Agent harness quality is the hidden variable throughout.
+    </p>
+  </div>
+</section>
+
+<!-- MAIN BATTLE -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Full Combat Analysis</div>
+    <div class="section-title">THE COMBATANTS</div>
+
+    <div class="competitors">
+
+      <!-- ===== CLAUDE CODE ===== -->
+      <div class="competitor-card" style="--card-accent:#00d4ff;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Claude Code</div>
+            <div class="card-maker">Anthropic · Terminal + IDE Agent</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-S">S TIER</div>
+            <div class="price-tag">$20–$100+/mo (Pro/Max)</div>
+            <div class="paradigm-tag">SYNC · TERMINAL-FIRST</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">SWE-Bench<span>80.9%</span></div>
+          <div class="stat-chip">Context<span>1M tokens</span></div>
+          <div class="stat-chip">Adoption<span>18% at work (2026)</span></div>
+          <div class="stat-chip">Growth<span>6× since Apr 2025</span></div>
+          <div class="stat-chip">Model<span>Opus 4.6 / Sonnet 4.6</span></div>
+        </div>
+
+        <div class="card-summary">
+          The most technically capable coding agent alive. Claude Code is a synchronous terminal + IDE orchestrator that maintains codebase context through agentic search, spawns subagents, calls MCP tools, and emits diffs for inline developer review. It's the only tool that consistently wins on hard multi-file refactors and complex reasoning. As of early 2026, adoption is 18% of professional developers worldwide — tied with Cursor — and growing at 6× year-over-year. LogRocket ranked it #1 for complex reasoning tasks in Feb 2026.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Highest SWE-Bench score in any real agent harness (80.9%)</li>
+              <li>1M token context window; handles enormous codebases</li>
+              <li>Best-in-class reasoning on ambiguous, hard problems</li>
+              <li>Full MCP tool ecosystem; extensible for any workflow</li>
+              <li>Sub-agent orchestration and parallel agent teams</li>
+              <li>VS Code extension + web IDE in addition to terminal</li>
+              <li>Fastest-growing enterprise coding adoption (>80% enterprise revenue at Anthropic)</li>
+              <li>Deep git integration; every edit reviewable</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Cost: Real-world heavy use runs $100–200/mo</li>
+              <li>Requires Claude Pro/Max subscription or API key — no free tier</li>
+              <li>Terminal-first UX has a learning curve vs. IDE tools</li>
+              <li>Synchronous: you must stay in the loop (no fire-and-forget)</li>
+              <li>Anthropic ecosystem lock-in; limited model flexibility</li>
+              <li>Costs can spike unpredictably on large agent tasks</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The undisputed king of hard problems. If you're doing serious engineering — large-scale refactors, complex multi-file architecture, ambiguous real-world bugs — nothing beats Claude Code. The price is real, the lock-in is real, but the results justify both.
+        </div>
+      </div>
+
+      <!-- ===== OPENAI CODEX ===== -->
+      <div class="competitor-card" style="--card-accent:#ff8c00;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">OpenAI Codex</div>
+            <div class="card-maker">OpenAI · Desktop App + CLI Agent</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-A">A TIER</div>
+            <div class="price-tag">Bundled w/ ChatGPT Plus ($20/mo)</div>
+            <div class="paradigm-tag">SYNC · DESKTOP APP</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">Terminal-Bench 2.0<span>77.3%</span></div>
+          <div class="stat-chip">Speed<span>240+ tok/s</span></div>
+          <div class="stat-chip">Plugins<span>90+ (v26.415)</span></div>
+          <div class="stat-chip">Model Router<span>GPT-5.3-Codex / GPT-5.4</span></div>
+          <div class="stat-chip">GitHub<span>Deep integration</span></div>
+        </div>
+
+        <div class="card-summary">
+          Codex has re-emerged in 2025–26 as a full agent, not just a model name. It runs as a native macOS/Windows desktop app with a model router that picks between GPT-5.3-Codex and GPT-5.4 variants based on task type. As of v26.415 (April 16, 2026), it ships background computer use and 90+ plugins including Figma, Notion, and GitHub. The GitHub integration is excellent and its deterministic multi-step follow-through on bounded tasks is praised heavily in developer community threads. Essentially free for ChatGPT Plus subscribers.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Best value: essentially free with ChatGPT Plus ($20/mo)</li>
+              <li>Excellent GitHub integration — PR-centric workflow feels native</li>
+              <li>Deterministic, reliable on bounded multi-step tasks</li>
+              <li>240+ tok/s generation speed — fastest CLI agent</li>
+              <li>Desktop app (macOS/Windows) = lowest activation energy</li>
+              <li>90+ plugins including Figma, Notion, GitHub as of Apr 2026</li>
+              <li>Model router intelligently selects GPT-5.3-Codex vs GPT-5.4</li>
+              <li>Strong community momentum and builder ecosystem</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Less impressive than Claude Code on complex, open-ended reasoning</li>
+              <li>Desktop app distribution is a UX strategy, not a capability edge</li>
+              <li>Trails Claude Code on extensibility and Jules on parallel throughput</li>
+              <li>Pricing and long-running agent costs can feel opaque</li>
+              <li>Doesn't have Claude Code's depth on large codebase architectural work</li>
+              <li>Ecosystem still maturing vs. Cursor for IDE experience</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The best value proposition in the space. If you're already paying for ChatGPT Plus, Codex CLI is a no-brainer addition. GitHub-first, fast, reliable, and improving aggressively. Not the deepest thinker, but the most cost-efficient capable agent on the market.
+        </div>
+      </div>
+
+      <!-- ===== GITHUB COPILOT ===== -->
+      <div class="competitor-card" style="--card-accent:#6e7681;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">GitHub Copilot</div>
+            <div class="card-maker">Microsoft / GitHub · IDE-Native</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-B">B TIER</div>
+            <div class="price-tag">$10/mo individual · $19/mo Business</div>
+            <div class="paradigm-tag">SYNC · IDE-NATIVE</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">Market Share<span>29% use at work</span></div>
+          <div class="stat-chip">Total Users<span>15M developers</span></div>
+          <div class="stat-chip">Enterprise<span>40% of 5000+ orgs</span></div>
+          <div class="stat-chip">IDE Support<span>VS Code, JetBrains, Xcode, Neovim</span></div>
+          <div class="stat-chip">Models<span>GPT-4o + Claude + Gemini</span></div>
+        </div>
+
+        <div class="card-summary">
+          The most deployed AI coding tool on Earth. Copilot's dominance is structural — it's the default in enterprise environments and Microsoft shops, pre-approved by IT, already in every dev's VS Code. Agent Mode shipped with MCP support in 2025, transforming it from an autocomplete toy into a genuine agent. Free tier for students and open-source contributors. However, power users consistently outgrow it and migrate to Claude Code or Cursor for harder work. Its growth in awareness and adoption has stalled since 2025 despite massive market share.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>15M developers — unmatched distribution and mindshare</li>
+              <li>Lowest friction enterprise adoption (pre-approved, already installed)</li>
+              <li>Works across VS Code, JetBrains, Visual Studio, Xcode, Neovim</li>
+              <li>Free tier for students and open-source contributors</li>
+              <li>Agent Mode + MCP support — finally agentic</li>
+              <li>Multi-model support: GPT-4o, Claude, Gemini selectable</li>
+              <li>Proven, stable, safe for regulated enterprise environments</li>
+              <li>$10/mo — cheapest serious option on the market</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Multi-file editing less reliable than Cursor or Claude Code</li>
+              <li>Agent Mode still basic vs. Claude Code or Codex</li>
+              <li>Complex reasoning significantly behind Claude-backed agents</li>
+              <li>Growth has stalled — awareness and adoption plateaued in 2025</li>
+              <li>The tool power users graduate out of, not into</li>
+              <li>Inline suggestion context collection still historically weak</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The safe, corporate bet. Not the best technical tool, but the most deployable. Copilot earns its place because $10/mo + enterprise SSO + zero IT fight = real developer productivity for most teams. The power ceiling is real though. Treat it as a floor, not a ceiling.
+        </div>
+      </div>
+
+      <!-- ===== GOOGLE JULES ===== -->
+      <div class="competitor-card" style="--card-accent:#4285f4;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Google Jules</div>
+            <div class="card-maker">Google Labs · Async Cloud Agent</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-B">B TIER</div>
+            <div class="price-tag">Free (15 tasks/day) · AI Pro $19.99/mo · Ultra $124.99/mo</div>
+            <div class="paradigm-tag">ASYNC · CLOUD VM · PR-CENTRIC</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">Model<span>Gemini 2.5 Pro / 3.1 Pro</span></div>
+          <div class="stat-chip">Tasks Completed<span>140K+ public improvements</span></div>
+          <div class="stat-chip">Free Tier<span>15 tasks/day, 3 concurrent</span></div>
+          <div class="stat-chip">Delivery<span>PR in ~10 minutes</span></div>
+          <div class="stat-chip">Paradigm<span>ONLY major async-first agent</span></div>
+        </div>
+
+        <div class="card-summary">
+          Jules is structurally unique: the only major AI coding agent built around async task queuing. You submit a task, walk away, and a reviewed pull request arrives in ~10 minutes. It clones your repo into a secure Google Cloud VM, proposes a plan (which you can steer), runs tests and builds, then opens a PR with a diff and optional audio changelog. Best for well-scoped backlog work: bug fixes, test writing, dependency bumps, incremental features. Jules V2 (codenamed "Jitro") is in waitlist, targeting KPI-driven goal-level development — a significant paradigm shift teased ahead of Google I/O 2026.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Only async-first agent — fire-and-forget while you do other work</li>
+              <li>Parallel task throughput (up to 60 concurrent on Ultra)</li>
+              <li>PR-based output — fits naturally into existing git review workflows</li>
+              <li>Generous free tier (15 tasks/day)</li>
+              <li>Gemini 3.1 Pro on paid tiers — capable long-context reasoning</li>
+              <li>Multimodal support — can accept screenshots and design artifacts in tasks</li>
+              <li>Jules CLI and public API now available — integrates into terminal and CI/CD</li>
+              <li>Jules V2 (Jitro) incoming — goal-level KPI-driven development</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Async model is wrong for tight feedback loops and iterative debugging</li>
+              <li>GitHub-only (working on expanding beyond GitHub)</li>
+              <li>No independent SWE-Bench data — performance is anecdotal</li>
+              <li>Daily task caps throttle throughput on free/lower tiers</li>
+              <li>Needs explicit task specs — ambiguous prompts fail more than sync agents</li>
+              <li>Compliance certifications not publicly documented</li>
+              <li>Described as "capable junior dev" — needs oversight, not a senior</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The right tool for the wrong comparison. Jules doesn't compete with Claude Code head-to-head — it competes with your backlog. If you could write a paragraph-level spec and walk away, give it to Jules. For iterative pair-programming, use something synchronous. The free tier alone makes it worth adding to your stack.
+        </div>
+      </div>
+
+      <!-- ===== GEMINI CLI ===== -->
+      <div class="competitor-card" style="--card-accent:#34a853;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Gemini CLI</div>
+            <div class="card-maker">Google · Terminal Agent</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-B">B TIER</div>
+            <div class="price-tag">Free (personal Google account) · AI Studio API key</div>
+            <div class="paradigm-tag">SYNC · TERMINAL · LARGE CONTEXT</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">Model<span>Gemini 2.5 Pro</span></div>
+          <div class="stat-chip">Context<span>1M tokens</span></div>
+          <div class="stat-chip">Best For<span>Large-context monorepo refactors</span></div>
+          <div class="stat-chip">Onboarding<span>Easiest free option</span></div>
+          <div class="stat-chip">Platform<span>macOS, Linux, Windows, Cloud Shell</span></div>
+        </div>
+
+        <div class="card-summary">
+          Gemini CLI is Google's synchronous terminal agent — the interactive counterpart to Jules's async model. It runs directly in the terminal, makes file edits, and carries out multi-step tasks without heavy UI overhead. Where it genuinely wins: loading a substantial chunk of a repository without aggressive summarization thanks to Gemini's massive context window. Developers praise it for large-context refactors and tasks involving screenshots or design artifacts (Gemini's multimodal edge). The free tier via personal Google account with no major hidden costs makes it the easiest free Claude Code alternative.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Genuinely free entry point — personal Google account suffices</li>
+              <li>1M token context — best for whole-repo refactors without summarization loss</li>
+              <li>Multimodal: accepts screenshots, design artifacts in prompts</li>
+              <li>Easiest CLI setup — pre-installed in Google Cloud Shell</li>
+              <li>Fast iteration for small-to-medium scoped tasks</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Less reliable than Claude-backed agents on complex multi-file refactors</li>
+              <li>Weaker reasoning depth vs. Claude Code on ambiguous architectural tasks</li>
+              <li>Community feedback: consistency drops on harder problems</li>
+              <li>Lives in Google ecosystem — less community tooling and MCP depth</li>
+              <li>Competes internally with Jules for Google's own mindshare</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The best free CLI agent available. If you're budget-constrained and working with large repos, Gemini CLI is the first stop. Don't expect Claude-level reasoning on hard problems, but for large-context triage and iterative debugging, it punches above its price point (free).
+        </div>
+      </div>
+
+      <!-- ===== CURSOR ===== -->
+      <div class="competitor-card" style="--card-accent:#ec4899;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Cursor</div>
+            <div class="card-maker">Anysphere · AI-Native IDE</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-A">A TIER</div>
+            <div class="price-tag">$20/mo Pro · $40/seat Teams</div>
+            <div class="paradigm-tag">SYNC · IDE-FIRST · VS CODE FORK</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">Paying Users<span>360K+</span></div>
+          <div class="stat-chip">Awareness<span>69% of developers</span></div>
+          <div class="stat-chip">Autocomplete<span>Inline + agentic</span></div>
+          <div class="stat-chip">Model Support<span>Claude, GPT-5, Gemini (Auto mode)</span></div>
+          <div class="stat-chip">Billing Drama<span>June 2025 credit debacle</span></div>
+        </div>
+
+        <div class="card-summary">
+          Cursor is the best AI-native IDE, full stop. A VS Code fork, so your extensions, shortcuts, and settings carry over. Its killer feature isn't raw benchmark scores — it's the experience: inline autocomplete that reads what you're building, Composer 2 for multi-file editing, and the smartest model routing (Auto mode picks the best model per task without consuming credits). 360K+ paying users. The $10/20 in daily overage charges from the June 2025 credit pricing disaster damaged trust significantly ("I love the product but I don't trust the company"), but the March 2026 reset helped. Power users consistently outgrow Copilot into Cursor.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Best overall IDE experience — polish, feel, and flow are unmatched</li>
+              <li>Inline autocomplete is a genuine force multiplier for in-editor work</li>
+              <li>Auto mode: unlimited model routing without touching credits</li>
+              <li>Tab-completion predicts multi-line intent — uniquely powerful</li>
+              <li>VS Code base = near-zero onboarding friction</li>
+              <li>Multi-file agentic editing well-integrated into editor context</li>
+              <li>BugBot add-on: AI code review with auto-fix</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>Pricing trust destroyed by June 2025 credit billing disaster ($7K/day burns)</li>
+              <li>VS Code-only — JetBrains users are locked out</li>
+              <li>Struggles with larger, more complex multi-file refactors vs. Claude Code</li>
+              <li>No terminal-native option; must use the Cursor IDE</li>
+              <li>Same price as Windsurf post-March 2026 — value parity gone</li>
+              <li>Community: "I'd recommend Windsurf to anyone starting fresh now"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The premium IDE, with trust baggage. For VS Code users who want the best AI-integrated editing experience, Cursor is still the answer. But the pricing trauma is real, Windsurf has closed the gap, and Claude Code eats its lunch on hard problems. Best used as the daily editor with Claude Code as your heavy-lift agent.
+        </div>
+      </div>
+
+      <!-- ===== WINDSURF ===== -->
+      <div class="competitor-card" style="--card-accent:#6366f1;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Windsurf</div>
+            <div class="card-maker">Cognition (ex-Codeium) · Agentic IDE</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-A">A TIER</div>
+            <div class="price-tag">$20/mo Pro · $200/mo Max</div>
+            <div class="paradigm-tag">SYNC · IDE-FIRST · MULTI-IDE</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">SWE-1.5 speed<span>950 tok/s (Cerebras)</span></div>
+          <div class="stat-chip">SWE-Bench<span>40.08% (SWE-1.5)</span></div>
+          <div class="stat-chip">IDE Support<span>40+ including JetBrains, Neovim, Xcode</span></div>
+          <div class="stat-chip">LogRocket 2026<span>#1 ranked</span></div>
+          <div class="stat-chip">Acquisition<span>Cognition/Devin, Dec 2025</span></div>
+        </div>
+
+        <div class="card-summary">
+          The wild card that survived a three-way acquisition war (OpenAI wanted it for $3B, Microsoft blocked it, Google DeepMind poached the CEO, Cognition grabbed the IP). Post-Cognition acquisition, Windsurf ships Devin's SWE-1.5 model running at 950 tokens/sec on Cerebras hardware — 13× faster than Claude Sonnet 4.5. Its Cascade agent builds persistent cross-session context: edits, terminal output, clipboard, conversation history. Arena Mode lets you blind-test two models on the same task. Supports 40+ IDEs vs. Cursor's VS Code-only stance. LogRocket ranked it #1 in Feb 2026.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>SWE-1.5: 950 tok/s on Cerebras — 13× faster than Sonnet for iterative work</li>
+              <li>40+ IDE support — JetBrains, Vim, Neovim, Xcode, not just VS Code</li>
+              <li>Cascade: persistent cross-session context memory across weeks</li>
+              <li>Arena Mode: blind side-by-side model comparison — genuinely innovative</li>
+              <li>Parallel multi-agent sessions (Wave 13+)</li>
+              <li>Devin integration deepening — autonomous execution pathway</li>
+              <li>Quota-based pricing (replaced credit system) — more predictable</li>
+              <li>Claude models restored post-acquisition</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>SWE-1.5 scores 40.08% — fast but less accurate than Claude/GPT-5 frontier</li>
+              <li>Corporate chaos (3-way acquisition saga) erodes product confidence</li>
+              <li>Boundary between Windsurf and Devin blurring — product identity unclear</li>
+              <li>Some users report IDE freezes and stability issues during agent tasks</li>
+              <li>No persistent background agent mode (requires Devin for that)</li>
+              <li>Pricing parity with Cursor post-March 2026 — no longer cheaper</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          The most innovative IDE in 2026. Speed, multi-IDE support, and Cascade's persistent memory solve real problems Cursor ignores. If you're a JetBrains user or you iterate hard and fast on prompts, Windsurf is the superior choice. The accuracy ceiling of SWE-1.5 is the only caveat — bring Claude Opus via API for hard problems.
+        </div>
+      </div>
+
+      <!-- ===== DEVIN ===== -->
+      <div class="competitor-card" style="--card-accent:#a855f7;">
+        <div class="card-header">
+          <div class="card-title-block">
+            <div class="card-tool-name">Devin</div>
+            <div class="card-maker">Cognition · Fully Autonomous Agent</div>
+          </div>
+          <div class="card-meta">
+            <div class="tier-badge tier-B">B TIER</div>
+            <div class="price-tag">$20 Core/mo + $2.25/ACU (usage-based)</div>
+            <div class="paradigm-tag">AUTONOMOUS · SANDBOXED · CLOUD</div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-chip">PR Merge Rate<span>67% on defined tasks</span></div>
+          <div class="stat-chip">Env<span>Sandboxed cloud: IDE + browser + terminal</span></div>
+          <div class="stat-chip">Use Case<span>Repetitive, well-defined delegation</span></div>
+          <div class="stat-chip">Wiki<span>Auto-indexes repos → architecture docs</span></div>
+        </div>
+
+        <div class="card-summary">
+          The most autonomous agent available — Devin runs in a fully sandboxed cloud environment with its own IDE, browser, terminal, and shell. You assign a task and Devin plans, writes, tests, and submits a PR without intervention. Devin 2.0 added Devin Wiki (auto-indexes repos, generates architecture docs) and Interactive Planning (validate the approach before execution). The 67% PR merge rate on defined tasks is a meaningful real-world number. Now also the parent company of Windsurf post-acquisition, which integrates Devin's architecture into Cascade.
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros">
+            <div class="pc-label">Strengths</div>
+            <ul class="pc-list">
+              <li>Most autonomous: full sandboxed environment, hands-off task execution</li>
+              <li>67% PR merge rate on clearly defined tasks</li>
+              <li>Devin Wiki: auto-generated architecture docs and repo indexing</li>
+              <li>Parallel sessions — multiple concurrent autonomous agents</li>
+              <li>Interactive Planning: review and steer before execution</li>
+              <li>Price dropped massively: from $500/mo to $20 + $2.25/ACU</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <div class="pc-label">Weaknesses</div>
+            <ul class="pc-list">
+              <li>ACU billing is unpredictable — complex tasks can spike costs</li>
+              <li>Works well only for narrowly defined, verifiable tasks</li>
+              <li>33% of defined tasks still fail — requires human oversight</li>
+              <li>Not a replacement for a developer — a delegation tool</li>
+              <li>Weaker on ambiguous or open-ended engineering problems</li>
+              <li>Overlap with Jules and Windsurf creates positioning confusion</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="verdict-strip">
+          <strong>Combat Verdict</strong>
+          Best for bug backlogs, repetitive migrations, and test coverage work. At $20 base + ACU, the economics work if your tasks are well-defined and verifiable. Not a general-purpose agent — it's a specialist contractor. Pair with Windsurf for interactive work.
+        </div>
+      </div>
+
+    </div><!-- /competitors -->
+  </div>
+</section>
+
+<!-- HONORABLE MENTIONS -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Also in the Fight</div>
+    <div class="section-title">HONORABLE MENTIONS</div>
+
+    <div class="mentions">
+
+      <div class="mention-card" style="--card-accent:#00ff88;">
+        <div class="mention-name">Cline</div>
+        <div class="mention-sub">Open Source · VS Code Extension · BYOK</div>
+        <div class="mention-body">
+          5M+ installs. Apache-2.0 licensed. You bring your own API key — zero markup. When paired with Claude Sonnet 4.5, it scores 80.8% on SWE-Bench. The most financially transparent option: you pay LLM provider rates, nothing else. For developers who want full control and don't trust vendor pricing, this is the answer.
+          <br><br><strong style="color:var(--green)">+ Zero markup, 80.8% SWE-Bench, full open source</strong><br>
+          <strong style="color:var(--accent2)">− No proprietary model, raw API cost can add up</strong>
+        </div>
+      </div>
+
+      <div class="mention-card" style="--card-accent:#ffd700;">
+        <div class="mention-name">Aider</div>
+        <div class="mention-sub">Open Source · Git-Native Terminal · MIT</div>
+        <div class="mention-body">
+          Every edit is a commit. Every session is a reviewable, revertible branch. For developers who want AI assistance that respects their git workflow, nothing is as natural. Free and MIT-licensed. Best for solo developers who live in the terminal and want full auditability.
+          <br><br><strong style="color:var(--green)">+ Git-native, free, maximally auditable</strong><br>
+          <strong style="color:var(--accent2)">− Less IDE integration, no proprietary model advantage</strong>
+        </div>
+      </div>
+
+      <div class="mention-card" style="--card-accent:#f97316;">
+        <div class="mention-name">Amazon Q Developer</div>
+        <div class="mention-sub">Amazon · AWS-Native</div>
+        <div class="mention-body">
+          The obvious choice if you live in AWS. Deep CloudFormation, Lambda, and CDK awareness that general-purpose agents don't have baked in. $19/user/month. Ranks well for AWS-specific infrastructure tasks, drops off sharply for non-AWS codebases.
+          <br><br><strong style="color:var(--green)">+ AWS-native context, solid for cloud infra work</strong><br>
+          <strong style="color:var(--accent2)">− Very narrow excellence — mediocre outside AWS</strong>
+        </div>
+      </div>
+
+      <div class="mention-card" style="--card-accent:#6366f1;">
+        <div class="mention-name">JetBrains Junie</div>
+        <div class="mention-sub">JetBrains · IDE-Native Agent</div>
+        <div class="mention-body">
+          5% adoption at work (Jan 2026). The agent-inside-IntelliJ that JetBrains users have been waiting for. Integrates Claude Agent and Codex under the hood. JetBrains Central and Air (multi-agent control plane) are ambitious — but Junie itself is still "important but not yet best-in-class." Useful for JetBrains loyalists who can't or won't switch editors.
+          <br><br><strong style="color:var(--green)">+ Native JetBrains integration, no editor switch needed</strong><br>
+          <strong style="color:var(--accent2)">− Slowness, stability reports, lagging competitors</strong>
+        </div>
+      </div>
+
+      <div class="mention-card" style="--card-accent:#34a853;">
+        <div class="mention-name">Google Antigravity</div>
+        <div class="mention-sub">Google · Free Preview IDE · Gemini 3 Pro</div>
+        <div class="mention-body">
+          Built on the Windsurf codebase post-acquisition mess. Gemini 3 Pro scored 76.2% on SWE-Bench Verified — genuinely competitive. Free in public preview. LogRocket ranked it #2 in Feb 2026. However, developers report stability issues, IDE freezes, and missing syntax highlighting when agents are active.
+          <br><br><strong style="color:var(--green)">+ Free, 76.2% SWE-Bench, Gemini 3 Pro backing</strong><br>
+          <strong style="color:var(--accent2)">− Stability issues, still preview-quality</strong>
+        </div>
+      </div>
+
+      <div class="mention-card" style="--card-accent:#00d4ff;">
+        <div class="mention-name">OpenCode</div>
+        <div class="mention-sub">Open Source · MIT · 95K GitHub Stars</div>
+        <div class="mention-body">
+          95K GitHub stars in first year, surpassing Claude Code in star count. Terminal-native, 75+ LLM providers, plan-first development, approval-based execution. 2.5M monthly developers. Community momentum is real but the tool is still maturing. Watch this space — it may be best-in-class by late 2026.
+          <br><br><strong style="color:var(--green)">+ 75+ models, open source, massive community momentum</strong><br>
+          <strong style="color:var(--accent2)">− Still maturing, feature-incomplete vs. mature agents</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Head-to-Head</div>
+    <div class="section-title">FEATURE MATRIX</div>
+
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Tool</th>
+          <th>SWE-Bench</th>
+          <th>Free Tier</th>
+          <th>Async</th>
+          <th>Multi-IDE</th>
+          <th>Terminal</th>
+          <th>MCP Support</th>
+          <th>Multi-Agent</th>
+          <th>Context</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--accent)">Claude Code</strong></td>
+          <td>80.9% ★</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td>1M tokens</td>
+          <td>Hard problems, large refactors</td>
+        </tr>
+        <tr>
+          <td><strong>Codex CLI</strong></td>
+          <td>77.3%*</td>
+          <td><span class="partial">w/ ChatGPT+</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="check">✓</span></td>
+          <td>128K+</td>
+          <td>GitHub-first, cost-efficient agent</td>
+        </tr>
+        <tr>
+          <td><strong>Copilot</strong></td>
+          <td>~44%</td>
+          <td><span class="check">✓ (students)</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Basic</span></td>
+          <td>Standard</td>
+          <td>Enterprise, low-friction onboarding</td>
+        </tr>
+        <tr>
+          <td><strong>Jules</strong></td>
+          <td>N/A</td>
+          <td><span class="check">✓ 15/day</span></td>
+          <td><span class="check">✓ ★</span></td>
+          <td><span class="cross">GitHub only</span></td>
+          <td><span class="check">✓ (CLI)</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ (parallel)</span></td>
+          <td>Large</td>
+          <td>Backlog clearing, async PR delivery</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini CLI</strong></td>
+          <td>78% (model)</td>
+          <td><span class="check">✓ ★</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td>1M tokens ★</td>
+          <td>Large-context refactors, free alternative</td>
+        </tr>
+        <tr>
+          <td><strong>Cursor</strong></td>
+          <td>N/A pub.</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">VS Code only</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td>Project-wide</td>
+          <td>Best IDE experience, daily editor</td>
+        </tr>
+        <tr>
+          <td><strong>Windsurf</strong></td>
+          <td>40.08% (SWE-1.5)</td>
+          <td><span class="partial">Limited</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓ 40+ IDEs ★</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓ (parallel)</span></td>
+          <td>Project-wide</td>
+          <td>JetBrains users, speed-first iteration</td>
+        </tr>
+        <tr>
+          <td><strong>Devin</strong></td>
+          <td>67% merge rate</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">Cloud only</span></td>
+          <td><span class="check">✓ (sandboxed)</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td>Repo-level</td>
+          <td>Fully autonomous task delegation</td>
+        </tr>
+        <tr>
+          <td><strong>Cline</strong></td>
+          <td>80.8% (w/ Sonnet)</td>
+          <td><span class="check">✓ (BYOK)</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="partial">VS Code ext.</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="partial">Partial</span></td>
+          <td>Model-dependent</td>
+          <td>Open source, transparent billing</td>
+        </tr>
+        <tr>
+          <td><strong>Aider</strong></td>
+          <td>N/A</td>
+          <td><span class="check">✓ (BYOK)</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td>Model-dependent</td>
+          <td>Git-native audit trail, terminal purists</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASE MATRIX -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Deployment Guide</div>
+    <div class="section-title">PICK YOUR WEAPON</div>
+
+    <div class="matrix-grid">
+      <div class="matrix-card">
+        <h4>Complex Multi-File Refactors</h4>
+        <div class="matrix-winner">Claude Code</div>
+        <div class="matrix-reason">Highest SWE-Bench, 1M context, best reasoning depth. Nothing else competes on hard architectural problems.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Best IDE Experience (VS Code)</h4>
+        <div class="matrix-winner">Cursor</div>
+        <div class="matrix-reason">Inline autocomplete, Auto model routing, Composer 2. Unmatched daily editor feel for VS Code users.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Best IDE Experience (JetBrains)</h4>
+        <div class="matrix-winner">Windsurf</div>
+        <div class="matrix-reason">Only serious AI IDE with 40+ IDE support including all JetBrains products. Cascade persistent context is a genuine edge.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Backlog Clearing / Async Work</h4>
+        <div class="matrix-winner">Jules</div>
+        <div class="matrix-reason">Fire-and-forget. 15 free tasks/day. Well-scoped bug fixes, test writing, dependency bumps — PR ready in 10 minutes.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Best Free Option</h4>
+        <div class="matrix-winner">Gemini CLI</div>
+        <div class="matrix-reason">Personal Google account, 1M token context, cloud shell pre-installed. Free and capable for mid-size repo work.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Best Value (Budget-Conscious)</h4>
+        <div class="matrix-winner">Codex CLI</div>
+        <div class="matrix-reason">Bundled with ChatGPT Plus you likely already pay for. Excellent GitHub integration. 77.3% Terminal-Bench.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Enterprise / Corporate Compliance</h4>
+        <div class="matrix-winner">GitHub Copilot</div>
+        <div class="matrix-reason">Pre-approved, pre-installed, enterprise SSO, 40% of Fortune 100 5K+ orgs. Lowest procurement friction by design.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Open Source / Full Transparency</h4>
+        <div class="matrix-winner">Cline / Aider</div>
+        <div class="matrix-reason">BYOK, zero markup. Cline hits 80.8% SWE-Bench with Claude Sonnet. Aider provides full git audit trail. Both free.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Fully Autonomous Delegation</h4>
+        <div class="matrix-winner">Devin</div>
+        <div class="matrix-reason">67% PR merge rate. Sandboxed cloud environment. Hands-off execution for repetitive, well-defined task queues.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Large Codebase Context</h4>
+        <div class="matrix-winner">Gemini CLI / Claude Code</div>
+        <div class="matrix-reason">Both offer 1M token windows. Gemini wins for free access; Claude Code wins for reasoning quality on what it sees.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Speed (Iterative Vibe Coding)</h4>
+        <div class="matrix-winner">Windsurf SWE-1.5</div>
+        <div class="matrix-reason">950 tok/s on Cerebras — 13× faster than Claude Sonnet 4.5. When you're iterating 50× per session, speed compounds.</div>
+      </div>
+      <div class="matrix-card">
+        <h4>Best Combo Stack</h4>
+        <div class="matrix-winner">Cursor + Claude Code</div>
+        <div class="matrix-reason">Cursor for daily editing and inline flow. Claude Code for hard problems, large refactors, agentic heavy lifting. The 2026 power user setup.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WINNER -->
+<section class="section" style="border:none;">
+  <div class="container">
+    <div class="section-label">Final Verdict</div>
+    <div class="section-title">THE WINNER</div>
+
+    <div class="winner-section">
+      <div class="winner-glyph">CHAMPION</div>
+      <div class="winner-label">Overall Technical Winner — Q2 2026</div>
+      <div class="winner-name">CLAUDE CODE</div>
+      <div class="winner-byline">Anthropic · Terminal + IDE Agent · S Tier</div>
+
+      <div class="winner-reasoning">
+        <p>
+          <strong>Claude Code wins the technical war.</strong> Its 80.9% SWE-Bench score is the highest measured for any agent in a real harness. Its 1M token context window handles codebases that break every competitor. Its reasoning depth on complex, ambiguous, multi-file problems is categorically ahead of the pack. The 6× year-over-year adoption growth and tie with Cursor for #2 workplace usage share (both at 18%) confirm this isn't hype — it's production reality.
+        </p>
+        <p>
+          <strong>But context matters.</strong> "Claude Code is the winner" doesn't mean you should use only Claude Code. The 2026 professional consensus is hybrid stacks. Claude Code is the heavy-lift agent you deploy on hard problems. Cursor or Windsurf is your daily editor. Jules or Devin clears your backlog async while you sleep. Cline or Codex fills the value gaps.
+        </p>
+        <p>
+          <strong>For Ripto's workflow specifically:</strong> Claude Code's terminal-first model, MCP extensibility, and git-native diff workflow map exactly to hardware-tested, regression-safe PS2 homebrew development. The 1M context window handles large Lua codebases, CI manifests, and documentation simultaneously. The reasoning depth is what you need when debugging BDMA mode edge cases or coordinating multi-device storage paths — not autocomplete, not speed.
+        </p>
+        <p>
+          <strong>The caveat that matters most:</strong> Cost. Heavy Claude Code use runs $100–200/month. Codex CLI is essentially free with ChatGPT Plus. For budget-constrained workflows, Codex + Cline (BYOK) delivers 85% of Claude Code's capability at 20% of the cost. That's a legitimate tradeoff — and one worth re-evaluating every quarter as the landscape shifts.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    AI CODING AGENT WAR · Q2 2026 · RESEARCH-VERIFIED · DATA FROM MORPHLLM, JETBRAINS AI PULSE, LOGROCKET, DIGITALAPPLIED, FAROS, TECHCRUNCH, NEURONAD<br>
+    <span style="color:rgba(90,110,130,0.5);margin-top:8px;display:block;">Benchmarks and rankings shift quarterly. Verify against current release notes before committing to a platform decision.</span>
+  </div>
+</footer>
+
+<script>
+  // Animate bars on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.bench-bar').forEach(bar => {
+        bar.classList.add('animated');
+      });
+    }, 300);
+  });
+</script>
+
+</body>
+</html>
