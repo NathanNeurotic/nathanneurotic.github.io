@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026 AI Coding Agent Landscape — publication-grade interactive report</title>
+  <meta name="description" content="A publication-grade, single-file interactive report on the 2026 AI coding agent landscape: taxonomy, methodology, benchmark framing, decision frameworks, and a filterable tool explorer." />
+  <style>
+    :root {
+      --bg: #0c1117;
+      --panel: #121923;
+      --panel-2: #18212d;
+      --panel-3: #1f2b39;
+      --border: #2a3646;
+      --border-soft: #364457;
+      --text: #d7e0ea;
+      --muted: #98a7b8;
+      --bright: #f7fafc;
+      --accent: #68b3ff;
+      --accent-2: #8ee4c4;
+      --accent-3: #ffd66e;
+      --warn: #ff9f76;
+      --danger: #ff8d96;
+      --low: #6b7a8d;
+      --shadow: 0 18px 40px rgba(0, 0, 0, .24);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1280px;
+      --toc: 260px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: linear-gradient(180deg, #0b1117 0%, #0e141b 100%); color: var(--text); line-height: 1.65; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--bright); }
+    button, input, select { font: inherit; }
+    :focus-visible { outline: 3px solid var(--accent-3); outline-offset: 3px; border-radius: 6px; }
+    .skip-link { position: absolute; left: -9999px; top: 12px; z-index: 1000; background: var(--bright); color: #09111b; padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+    .skip-link:focus { left: 12px; }
+    .progress { position: fixed; inset: 0 auto auto 0; height: 3px; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); z-index: 999; box-shadow: 0 0 16px rgba(104, 179, 255, .45); }
+    .page-shell { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+    header.hero { padding: 44px 0 28px; border-bottom: 1px solid var(--border); background: radial-gradient(circle at top center, rgba(104,179,255,.12), transparent 40%), linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)); }
+    .eyebrow { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .eyebrow .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent-2); display: inline-block; }
+    .hero h1 { margin: 10px 0 12px; font-size: clamp(2.3rem, 6vw, 4.6rem); line-height: 1.02; color: var(--bright); max-width: 980px; }
+    .hero p.lead { margin: 0; max-width: 920px; font-size: clamp(1.02rem, 1.7vw, 1.2rem); color: var(--text); }
+    .hero-grid { margin-top: 24px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+    .hero-card, .panel { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .hero-card { padding: 20px; }
+    .hero-card h2 { margin: 0 0 10px; font-size: 1.15rem; color: var(--bright); }
+    .hero-card p { margin: 0; color: var(--text); }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border-soft); background: rgba(255,255,255,.02); color: var(--text); border-radius: 999px; padding: 6px 10px; font-size: .8rem; }
+    .chip-soft { font-size: .76rem; padding: 5px 10px; color: var(--muted); }
+    .chip-category { background: rgba(104,179,255,.14); border-color: rgba(104,179,255,.3); color: #b6d8ff; text-transform: capitalize; }
+    .chip-rating { background: rgba(142,228,196,.12); border-color: rgba(142,228,196,.26); color: #cbffea; }
+    .chip-confidence { text-transform: none; }
+    .chip-high { background: rgba(104,179,255,.12); border-color: rgba(104,179,255,.28); color: #c9e2ff; }
+    .chip-medium { background: rgba(255,214,110,.12); border-color: rgba(255,214,110,.28); color: #ffe6a2; }
+    .chip-low { background: rgba(255,141,150,.12); border-color: rgba(255,141,150,.28); color: #ffc3c8; }
+    .callout-list { margin: 0; padding-left: 18px; }
+    .callout-list li + li { margin-top: 8px; }
+    .layout { display: grid; grid-template-columns: var(--toc) minmax(0, 1fr); gap: 28px; align-items: start; padding: 24px 0 56px; }
+    .toc { position: sticky; top: 18px; }
+    .toc .panel { padding: 16px; }
+    .toc h2 { margin: 0 0 10px; font-size: .98rem; color: var(--bright); }
+    .toc nav { display: grid; gap: 2px; }
+    .toc a { color: var(--muted); padding: 8px 10px; border-radius: 10px; font-size: .92rem; }
+    .toc a:hover, .toc a.active { color: var(--bright); background: rgba(104,179,255,.1); }
+    .toc small { color: var(--muted); display: block; margin-top: 10px; }
+    .content { display: grid; gap: 22px; }
+    section.report-section { scroll-margin-top: 84px; }
+    section.report-section .panel { padding: 24px; }
+    .section-label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-2); font-weight: 700; margin-bottom: 6px; }
+    h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.45rem); line-height: 1.08; color: var(--bright); }
+    .section-copy { margin: 10px 0 0; max-width: 900px; color: var(--muted); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .card { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel); padding: 18px; }
+    .card h3 { margin: 0 0 8px; font-size: 1rem; color: var(--bright); }
+    .card p { margin: 0; color: var(--text); }
+    .card .kicker { color: var(--muted); font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .bullet-list { margin: 14px 0 0; padding-left: 18px; }
+    .bullet-list li + li { margin-top: 10px; }
+    .timeline { display: grid; gap: 12px; margin-top: 18px; }
+    .timeline-item { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 14px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel); }
+    .timeline-date { color: var(--accent-3); font-weight: 700; font-size: .9rem; }
+    .timeline-item p { margin: 0; }
+    .timeline-item .sources-inline { margin-top: 8px; color: var(--muted); font-size: .9rem; }
+    .table-wrap { overflow-x: auto; margin-top: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; min-width: 880px; background: var(--panel); }
+    th, td { padding: 14px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+    th { color: var(--bright); font-size: .9rem; background: rgba(255,255,255,.02); position: sticky; top: 0; }
+    td { color: var(--text); font-size: .95rem; }
+    tr:last-child td { border-bottom: 0; }
+    .bar { width: 100%; height: 10px; background: #0d141b; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .segmented { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .segmented button { border: 1px solid var(--border-soft); background: var(--panel); color: var(--text); padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+    .segmented button[aria-pressed="true"] { background: rgba(104,179,255,.12); color: var(--bright); border-color: rgba(104,179,255,.35); }
+    .decision-panel { display: none; margin-top: 14px; }
+    .decision-panel.active { display: block; }
+    .stack-list { display: grid; gap: 12px; margin-top: 18px; }
+    .stack-item { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; background: var(--panel); }
+    .stack-item h3 { margin: 0 0 8px; }
+    .stack-item .stack-title { color: var(--accent-3); font-weight: 700; margin-bottom: 6px; }
+    .control-bar { position: sticky; top: 0; z-index: 20; background: rgba(12,17,23,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 12px 0; margin-bottom: 14px; }
+    .control-grid { display: grid; grid-template-columns: 1.4fr auto auto auto; gap: 10px; align-items: center; }
+    .search, .sort-select { width: 100%; background: #0c131a; color: var(--bright); border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px 14px; }
+    .btn { border: 1px solid var(--border-soft); background: var(--panel); color: var(--text); padding: 12px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+    .btn:hover { background: var(--panel-2); color: var(--bright); }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .filter-row button { border: 1px solid var(--border-soft); background: var(--panel); color: var(--text); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+    .filter-row button.active { background: rgba(104,179,255,.12); border-color: rgba(104,179,255,.34); color: var(--bright); }
+    .results-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-top: 12px; color: var(--muted); font-size: .92rem; }
+    .tools-grid { display: grid; gap: 14px; margin-top: 16px; }
+    .tool-card { border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel); overflow: hidden; }
+    .tool-card[open] { background: linear-gradient(180deg, rgba(104,179,255,.05), rgba(255,255,255,.01)); }
+    .tool-card[hidden] { display: none !important; }
+    .tool-card summary { list-style: none; cursor: pointer; padding: 18px; }
+    .tool-card summary::-webkit-details-marker { display: none; }
+    .tool-card summary:hover { background: rgba(255,255,255,.02); }
+    .tool-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+    .tool-head h3 { margin: 8px 0 8px; font-size: 1.25rem; color: var(--bright); }
+    .tool-head h3 span { color: var(--muted); font-size: .95rem; font-weight: 500; }
+    .tool-head p { margin: 0; color: var(--text); }
+    .tool-actions { display: flex; align-items: center; gap: 10px; }
+    .deep-link { width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--border-soft); display: inline-grid; place-items: center; color: var(--muted); }
+    .summary-arrow { color: var(--muted); font-size: 1.2rem; transition: transform .2s ease; }
+    .tool-card[open] .summary-arrow { transform: rotate(180deg); color: var(--bright); }
+    .tool-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tool-body { padding: 0 18px 18px; border-top: 1px solid var(--border); }
+    .tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 18px; }
+    .tool-panel { border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,.015); padding: 14px; }
+    .tool-panel h4, .tool-scores h4 { margin: 0 0 8px; color: var(--bright); font-size: .95rem; }
+    .tool-panel p, .tool-scores p { margin: 0; color: var(--text); }
+    .tool-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .score-grid { display: grid; gap: 8px; }
+    .score-row { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+    .mini-meter { display: block; width: 100%; height: 9px; border-radius: 999px; overflow: hidden; background: #0d141b; border: 1px solid var(--border); }
+    .mini-meter span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+    .meter-label { color: var(--muted); font-size: .85rem; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .source-link { border: 1px solid var(--border-soft); border-radius: 999px; padding: 6px 10px; font-size: .82rem; color: var(--text); background: rgba(255,255,255,.02); }
+    .empty-state { display: none; border: 1px dashed var(--border-soft); border-radius: var(--radius); padding: 24px; background: rgba(255,255,255,.01); color: var(--muted); }
+    .empty-state.show { display: block; }
+    .shortcut-modal { position: fixed; inset: 0; background: rgba(7,10,14,.62); display: none; align-items: center; justify-content: center; z-index: 80; padding: 18px; }
+    .shortcut-modal.open { display: flex; }
+    .shortcut-sheet { width: min(560px, 100%); background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+    .shortcut-sheet h3 { margin: 0 0 8px; }
+    .shortcut-sheet table { min-width: 0; background: transparent; }
+    .source-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+    .source-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: var(--panel); }
+    .source-card h3 { margin: 0 0 10px; font-size: 1rem; }
+    footer { color: var(--muted); padding: 16px 0 40px; font-size: .9rem; }
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: relative; top: 0; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 820px) {
+      .grid-3, .grid-2, .grid-4, .tool-grid, .tool-scores, .source-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .control-grid { grid-template-columns: 1fr; }
+      .results-row { flex-direction: column; align-items: flex-start; }
+      .score-row { grid-template-columns: 120px minmax(0, 1fr) auto; }
+    }
+    @media (max-width: 560px) {
+      .page-shell { width: min(var(--max), calc(100% - 20px)); }
+      header.hero { padding-top: 28px; }
+      .hero h1 { font-size: 2.1rem; }
+      .tool-head { grid-template-columns: 1fr; }
+      .tool-actions { justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="progress" id="progressBar" aria-hidden="true"></div>
+  <div class="shortcut-modal" id="shortcutModal" aria-hidden="true" role="dialog" aria-labelledby="shortcutTitle">
+    <div class="shortcut-sheet">
+      <h3 id="shortcutTitle">Keyboard shortcuts</h3>
+      <p class="section-copy" style="margin:0 0 12px;">These shortcuts are active when the focus is not inside an input or select.</p>
+      <table>
+        <thead><tr><th>Key</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><strong>/</strong></td><td>Focus search</td></tr><tr><td><strong>e</strong></td><td>Expand all visible tools</td></tr><tr><td><strong>c</strong></td><td>Collapse all visible tools</td></tr><tr><td><strong>t</strong></td><td>Jump to top</td></tr><tr><td><strong>?</strong></td><td>Open or close shortcuts</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:14px; display:flex; justify-content:flex-end;"><button class="btn" id="closeShortcutModal" type="button">Close</button></div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="page-shell">
+      <div class="eyebrow"><span class="dot"></span> Single-file interactive report · updated April 20, 2026 · 24 tools across terminal, IDE, async, extension, and browser layers</div>
+      <h1>2026 AI coding agent landscape</h1>
+      <p class="lead">A publication-grade, decision-oriented rewrite of the attached report. The goal is not to crown one universal winner. The goal is to help different readers make better tool choices with clearer methodology, stronger caveats, and a cleaner product taxonomy.</p>
+      <div class="hero-meta">
+        <span class="chip">Fast answer first</span>
+        <span class="chip">Benchmark caveats explicit</span>
+        <span class="chip">Filterable and sortable</span>
+        <span class="chip">Standalone HTML</span>
+        <span class="chip">Accessibility and keyboard support</span>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h2>Bottom line</h2>
+          <ul class="callout-list">
+            <li><strong>There is no universal winner.</strong> The strongest 2026 recommendation is usually a stack, not a single product.</li>
+            <li><strong>Claude Code is the most defensible technical default</strong> when the work is hard, ambiguous, and expensive to get wrong.</li>
+            <li><strong>Cursor and Windsurf lead the editor-first lane,</strong> Copilot leads the GitHub-native rollout lane, and Jules leads the async backlog-worker lane.</li>
+            <li><strong>Browser builders are a different category.</strong> They are often the fastest route to a prototype, but they are not automatically the best engineering platforms.</li>
+          </ul>
+        </div>
+        <div class="hero-card">
+          <h2>What this rewrite fixes</h2>
+          <ul class="callout-list">
+            <li>Separates model signals, product/harness signals, and vendor-reported claims.</li>
+            <li>Turns the page into a real decision system: persona, workflow, budget, codebase, and trust posture.</li>
+            <li>Softens brittle claims and removes fake precision where public evidence is thin or unstable.</li>
+            <li>Rebuilds the interaction model with semantic landmarks, deep links, filtering, sorting, and keyboard shortcuts.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-shell layout" id="main">
+    <aside class="toc" aria-label="Table of contents">
+      <div class="panel">
+        <h2>Contents</h2>
+        <nav id="tocNav">
+          <a href="#audit-summary">Audit summary</a><a href="#improvements">What changed in this pass</a><a href="#executive">Executive overview</a><a href="#how-to-read">How to read this page</a><a href="#methodology">Methodology and confidence</a><a href="#recent">What changed recently</a><a href="#taxonomy">Taxonomy of the market</a><a href="#benchmarks">Benchmark framing</a><a href="#decisions">Decision frameworks</a><a href="#stacks">Recommended stacks</a><a href="#explorer">Tool explorer</a><a href="#hype">Where hype exceeds evidence</a><a href="#antipatterns">Anti-patterns</a><a href="#checklist">Evaluation checklist</a><a href="#watchlist">Watchlist</a><a href="#sources">Sources and notes</a>
+        </nav>
+        <small>Tip: press <strong>/</strong> for search, <strong>e</strong> to expand visible tools, <strong>c</strong> to collapse visible tools, and <strong>?</strong> for this shortcut sheet.</small>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="report-section" id="audit-summary" data-section-title="Audit summary"><div class="panel"><div class="section-label">Audit</div><h2>Audit summary</h2><p class="section-copy">The attached file already had scope and energy. The main job here was to make it read like a report instead of a long, opinionated ranking page.</p><ul class="bullet-list"><li>The original page often treated model results, product surfaces, and vendor-reported numbers as if they were directly comparable.</li><li>Pricing, plan names, bundling, and access language had drifted in several high-traffic entries.</li><li>The page jumped too quickly from long card descriptions to absolute winners instead of guiding readers by persona, workflow, budget, and trust posture.</li><li>The UX had strong bones but still leaned on inline handlers, weak semantic landmarks, and long-scroll reading patterns that made the report feel more like a ranking page than a decision system.</li></ul></div></section>
+      <section class="report-section" id="improvements" data-section-title="What changed in this pass"><div class="panel"><div class="section-label">Revision log</div><h2>What changed in this pass</h2><p class="section-copy">This pass adds structure, evidence discipline, and decision support without collapsing the field into one shallow winner.</p><ul class="bullet-list"><li>Rebuilt the report around a clearer executive answer, methodology, evidence tiers, and non-comparability rules.</li><li>Added taxonomy and decision frameworks for sync vs async, IDE vs terminal vs browser, open/BYOK vs closed, autonomy vs control, persona, workflow, budget, codebase size, and trust tolerance.</li><li>Reworked benchmark framing to separate official model signals, product/harness signals, and vendor-reported claims instead of over-ranking mixed evidence.</li><li>Shifted the conclusion away from a single universal winner toward stack recommendations and deployment-fit guidance.</li><li>Upgraded navigation, table of contents, section tracking, keyboard shortcuts, search, filtering, sorting, expand/collapse, empty states, mobile behavior, and accessibility semantics.</li><li>Removed externally hosted fonts, inline event handlers, and brittle interaction patterns to keep the deliverable cleaner and more standalone-friendly.</li></ul></div></section>
+      <section class="report-section" id="executive" data-section-title="Executive overview"><div class="panel"><div class="section-label">Fast answer</div><h2>Executive overview</h2><p class="section-copy">Readers who only need the conclusion should be able to leave this page in under three minutes with a sane short list.</p><div class="grid-3" style="margin-top:18px;"><article class="card"><div class="kicker">Most defensible technical default</div><h3>Claude Code</h3><p>Best when the task is ambiguous, multi-file, and expensive to get wrong. It is the least controversial answer for hard engineering work, but not the cheapest or most open one.</p></article><article class="card"><div class="kicker">Best daily IDE for many teams</div><h3>Cursor or Windsurf</h3><p>If your developers want the agent inside the editor all day, these are the two strongest editor-first choices. Cursor is easier to summarize; Windsurf is more dynamic and less simple to normalize.</p></article><article class="card"><div class="kicker">Best free/open terminal entry point</div><h3>Gemini CLI or Aider</h3><p>Gemini CLI is the best free on-ramp; Aider is the best high-control BYOK terminal tool.</p></article><article class="card"><div class="kicker">Best GitHub-native rollout</div><h3>GitHub Copilot</h3><p>It is the easiest broad organizational standard if your repos, review flow, and access model already revolve around GitHub.</p></article><article class="card"><div class="kicker">Best async backlog worker</div><h3>Jules</h3><p>Use it for queued, bounded ticket work. Treat it like a contractor that returns PRs, not a pair programmer.</p></article><article class="card"><div class="kicker">Best enterprise-control buyers</div><h3>Tabnine or Augment</h3><p>Pick Tabnine when deployment/privacy dominate. Pick Augment when large-codebase context and review automation matter more.</p></article></div></div></section>
+      <section class="report-section" id="how-to-read" data-section-title="How to read this page"><div class="panel"><div class="section-label">Reader guide</div><h2>How to read this page</h2><p class="section-copy">This page is dense by design. It is organized to help you narrow candidates before you compare tool cards.</p><div class="grid-2" style="margin-top:18px;"><article class="card"><h3>1. Start with the fast answer</h3><p>Use the executive summary and decision tabs first. They are designed to narrow the field before you inspect individual tools.</p></article><article class="card"><h3>2. Treat benchmark numbers as inputs, not verdicts</h3><p>This report distinguishes model-level results, harness/product signals, and vendor-reported claims. A strong score helps, but it does not erase packaging, governance, or workflow differences.</p></article><article class="card"><h3>3. Filter by how you actually work</h3><p>Use the explorer to narrow by terminal, IDE, browser, async, BYOK/OSS, enterprise, legacy, greenfield, budget, or risk posture.</p></article><article class="card"><h3>4. Standardize on stacks, not heroes</h3><p>Most teams do better with a primary interactive tool plus a review layer or async worker than with one tool forced into every job.</p></article></div></div></section>
+      <section class="report-section" id="methodology" data-section-title="Methodology and confidence"><div class="panel"><div class="section-label">Methodology</div><h2>Methodology and confidence</h2><p class="section-copy">The goal is not to produce fake certainty. The goal is to produce a useful map that makes the uncertain parts explicit.</p><div class="grid-3" style="margin-top:18px;">
+        <article class="card"><div class="kicker">What is compared</div><h3>Products, not just models</h3><p>This report compares shipping tools and platforms: packaging, deployment model, surface area, governance, autonomy, and workflow fit. Model performance is important, but it is only one layer of the decision.</p></article>
+        <article class="card"><div class="kicker">What is not directly comparable</div><h3>Model scores, harness scores, and vendor claims</h3><p>Official model benchmarks, product/harness results, and vendor-reported stack claims are all useful. They are not the same thing, and they should not be ranked as if they were.</p></article>
+        <article class="card"><div class="kicker">Confidence tiers</div><h3>High, medium, low</h3><p>Confidence is high on packaging, pricing posture, surfaces, and official docs. Confidence is medium on relative workflow performance. Confidence is low when a product is in preview or public evidence is mostly vendor narrative.</p></article>
+      </div>
+      <div class="grid-3" style="margin-top:16px;">
+        <article class="card"><div class="kicker">Pricing discipline</div><h3>Seat price is not total cost</h3><p>Many products now combine seats, credits, overages, model classes, API pass-through, or separate cloud/runtime charges. The report avoids fake precision unless a product publishes it clearly.</p></article>
+        <article class="card"><div class="kicker">Ranking discipline</div><h3>Workflow fit outranks hype</h3><p>A weaker benchmark can still win the deployment decision if the product fits the team’s editor, review flow, governance needs, and codebase reality better than a more impressive demo tool.</p></article>
+        <article class="card"><div class="kicker">Scope guardrail</div><h3>Browser builders are included, but not over-promoted</h3><p>They belong in the market map because buyers keep comparing them. They remain a separate category from repo-centric coding agents and are treated that way throughout the page.</p></article>
+      </div></div></section>
+      <section class="report-section" id="recent" data-section-title="What changed recently"><div class="panel"><div class="section-label">Recent movement</div><h2>What changed recently</h2><p class="section-copy">This market changes too quickly for static rankings. These are the developments most likely to change a buyer’s mental model since late 2025.</p><div class="timeline"><article class="timeline-item"><div class="timeline-date">April 16, 2026</div><div><p>Anthropic shipped Claude Opus 4.7 and added new Claude Code review capabilities such as /ultrareview, reinforcing Claude’s role as a coding-heavy workflow centerpiece.</p><div class="sources-inline"><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener noreferrer">Claude Opus 4.7</a></div></div></article><article class="timeline-item"><div class="timeline-date">March 5, 2026</div><div><p>OpenAI released GPT-5.4 and published fresh Coding / Terminal-Bench data, while Codex continued expanding across app, CLI, web, and IDE surfaces for paid ChatGPT users.</p><div class="sources-inline"><a href="https://openai.com/index/introducing-gpt-5-4/" target="_blank" rel="noopener noreferrer">GPT-5.4</a> · <a href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer">Codex app</a> · <a href="https://openai.com/index/introducing-gpt-5-3-codex/" target="_blank" rel="noopener noreferrer">GPT-5.3-Codex</a></div></div></article><article class="timeline-item"><div class="timeline-date">March 18 and April 15, 2026</div><div><p>Windsurf overhauled self-serve pricing and then pushed the Agent Command Center plus Devin-in-Windsurf messaging, making the product more explicitly multi-surface and cloud-aware.</p><div class="sources-inline"><a href="https://windsurf.com/blog/windsurf-pricing-plans" target="_blank" rel="noopener noreferrer">Windsurf pricing update</a> · <a href="https://windsurf.com/" target="_blank" rel="noopener noreferrer">Windsurf</a></div></div></article><article class="timeline-item"><div class="timeline-date">February 24 and March 11, 2026</div><div><p>Replit clarified its plan structure with Core and Pro, then positioned Agent 4 as a more creative, all-in-one browser build environment.</p><div class="sources-inline"><a href="https://blog.replit.com/pro-plan" target="_blank" rel="noopener noreferrer">Replit Pro and Core changes</a> · <a href="https://blog.replit.com/introducing-agent-4-built-for-creativity" target="_blank" rel="noopener noreferrer">Replit Agent 4</a></div></div></article><article class="timeline-item"><div class="timeline-date">January 28 and December 18, 2025</div><div><p>JetBrains moved decisively toward a more open agent ecosystem with BYOK and the ACP registry, which matters for Junie, third-party agents, and Zed-style interoperability.</p><div class="sources-inline"><a href="https://blog.jetbrains.com/ai/2025/12/bring-your-own-key-byok-is-now-live-in-jetbrains-ides/" target="_blank" rel="noopener noreferrer">JetBrains BYOK</a> · <a href="https://blog.jetbrains.com/ai/2026/01/acp-agent-registry/" target="_blank" rel="noopener noreferrer">ACP registry</a></div></div></article><article class="timeline-item"><div class="timeline-date">Late 2025 into 2026</div><div><p>AWS began rebranding Amazon Q developer surfaces toward Kiro, which improves some product focus but leaves temporary naming confusion that buyers should note in pilots and procurement docs.</p><div class="sources-inline"><a href="https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/upgrade-to-kiro.html" target="_blank" rel="noopener noreferrer">Upgrade to Kiro</a> · <a href="https://kiro.dev/pricing/" target="_blank" rel="noopener noreferrer">Kiro pricing</a> · <a href="https://aws.amazon.com/q/developer/" target="_blank" rel="noopener noreferrer">Amazon Q Developer</a></div></div></article></div></div></section>
+      <section class="report-section" id="taxonomy" data-section-title="Taxonomy of the market"><div class="panel"><div class="section-label">Market model</div><h2>Taxonomy of the market</h2><p class="section-copy">These tools are not all doing the same job. The taxonomy below is the main guardrail against bad comparisons.</p><div class="grid-3" style="margin-top:18px;"><article class="card"><h3>Sync vs async</h3><p>Interactive agents like Claude Code, Cursor, Copilot, and Codex help you steer in real time. Async agents like Jules and Devin are better for queue-based ticket work returned later as plans or PRs.</p></article><article class="card"><h3>IDE-native vs terminal-native vs browser-native</h3><p>IDE tools optimize day-to-day coding flow. Terminal tools favor control, composability, and repo discipline. Browser builders optimize speed from idea to prototype, often at the cost of engineering rigor.</p></article><article class="card"><h3>Closed vs open / BYOK</h3><p>Closed products tend to have smoother packaging and better defaults. Open/BYOK stacks like Aider, Cline, OpenCode, Kilo, and Continue trade polish for transparency, portability, and model choice.</p></article><article class="card"><h3>High autonomy vs high control</h3><p>Jules, Devin, Antigravity, and browser builders push farther without constant intervention. Aider, Cline, Continue, Tabnine, and Junie fit teams that want narrower permissions and stronger review boundaries.</p></article><article class="card"><h3>Solo-dev vs team/org fit</h3><p>Solo builders can tolerate more usage complexity and sharper edges. Team buyers care more about SSO, pooled billing, auditability, rollout friction, and reproducibility.</p></article><article class="card"><h3>Greenfield vs legacy-codebase fit</h3><p>Browser builders and some IDE tools shine in greenfield work. Large brownfield repos still favor strong context management, code search, review, and change discipline.</p></article><article class="card"><h3>Cost-efficiency vs frontier capability</h3><p>Gemini CLI, Aider, Cline, Kilo, and Continue can be very cost-efficient. Claude Code and premium Codex/Cursor/Windsurf usage are usually easier to justify when engineering time is the expensive variable.</p></article></div></div></section>
+      <section class="report-section" id="benchmarks" data-section-title="Benchmark framing"><div class="panel"><div class="section-label">Evidence map</div><h2>Benchmark framing</h2><p class="section-copy">Benchmarks matter. The mistake is pretending that every published number describes the same thing at the same layer.</p><div class="card" style="margin-top:18px;"><p><strong>Rule of thumb:</strong> benchmark numbers are directional, not decisive. This report gives the most weight to benchmark evidence when the tool class and measurement layer are clear, and less weight when the number is model-only, vendor-reported, or drawn from a different benchmark family.</p></div>
+      <div class="table-wrap"><table><thead><tr><th>Signal</th><th>Published result</th><th>Type</th><th>How to use it</th></tr></thead><tbody><tr><td><strong>Anthropic / Claude Opus 4.6</strong><div class="bar"><span style="width:80.84%"></span></div></td><td>80.84% SWE-bench Verified</td><td>Official model signal</td><td>Strong evidence that Claude-backed coding stacks are elite. Not a perfectly normalized score for every Claude product surface.</td></tr><tr><td><strong>Cline + Claude Sonnet 4.5</strong><div class="bar"><span style="width:80.8%"></span></div></td><td>80.8% SWE-bench Verified</td><td>Vendor-reported product stack</td><td>Useful but configuration-sensitive. Treat as directional rather than final truth.</td></tr><tr><td><strong>OpenAI GPT-5.3-Codex</strong><div class="bar"><span style="width:77.3%"></span></div></td><td>77.3% Terminal-Bench 2.0</td><td>Official model signal</td><td>Good evidence for terminal-agent strength, but different benchmark family from SWE-bench Verified or SWE-Bench Pro.</td></tr><tr><td><strong>OpenAI GPT-5.4</strong><div class="bar"><span style="width:75.1%"></span></div></td><td>57.7% SWE-Bench Pro / 75.1% Terminal-Bench 2.0</td><td>Official model signal</td><td>Useful for reading the current OpenAI trajectory; still not a direct UI-product comparison.</td></tr><tr><td><strong>Windsurf SWE-1.6</strong><div class="bar"><span style="width:58%"></span></div></td><td>No clean single public product number</td><td>Vendor framing / docs</td><td>Windsurf emphasizes comparative research claims and in-product model choices more than a single easy-to-audit product benchmark.</td></tr><tr><td><strong>GitHub Copilot, Cursor, Jules, Devin, Augment, Junie</strong><div class="bar"><span style="width:50%"></span></div></td><td>No robust single public product benchmark</td><td>Workflow-first evaluation</td><td>Judge these more by deployment fit, governance, review overhead, and actual pilot results than by missing one-number scoreboards.</td></tr></tbody></table></div>
+      <div class="grid-3" style="margin-top:18px;">
+        <article class="card"><div class="kicker">High confidence</div><h3>Deployment model and packaging</h3><p>Official docs are usually good enough to trust on surfaces, pricing posture, plan structure, and product direction.</p></article>
+        <article class="card"><div class="kicker">Medium confidence</div><h3>Relative productivity</h3><p>Even strong benchmarks rarely tell you the review burden, repo fit, or cost-per-accepted-change in your actual stack.</p></article>
+        <article class="card"><div class="kicker">Low confidence</div><h3>Universal rankings</h3><p>Any page that mixes browser builders, terminal agents, IDE assistants, and async cloud workers into one rigid leaderboard should be treated skeptically.</p></article>
+      </div></div></section>
+      <section class="report-section" id="decisions" data-section-title="Decision frameworks"><div class="panel"><div class="section-label">Decision support</div><h2>Decision frameworks</h2><p class="section-copy">These frameworks are designed to answer, “What should my team test first?” rather than “Who won the internet this week?”</p>
+        <div class="table-wrap"><table><thead><tr><th>Scenario</th><th>Primary pick</th><th>Strong alternatives</th><th>Why it wins</th><th>Main caveat</th></tr></thead><tbody><tr><td><strong>Hardest technical repo work</strong></td><td>Claude Code</td><td>Codex, Cline + frontier model</td><td>Best when ambiguity, search depth, and cross-file reasoning dominate.</td><td>Do not reduce this to a seat-price comparison.</td></tr><tr><td><strong>Everyday VS Code workflow</strong></td><td>Cursor</td><td>Windsurf, GitHub Copilot</td><td>Best all-around editor-first experience for many developers.</td><td>Forked-editor standardization is still a real org decision.</td></tr><tr><td><strong>GitHub-centric organization</strong></td><td>GitHub Copilot</td><td>Codex, Claude via GitHub workflows</td><td>Best broad-rollout option when repos, issues, and review already live in GitHub.</td><td>The safest default is not always the strongest frontier agent.</td></tr><tr><td><strong>JetBrains-first team</strong></td><td>Junie</td><td>Cline, GitHub Copilot, Codex in JetBrains</td><td>Native fit matters more than generic leaderboard energy here.</td><td>Credit economics and feature parity still need checking.</td></tr><tr><td><strong>Async ticket backlog</strong></td><td>Jules</td><td>Devin</td><td>Best category fit for work you want returned later as reviewable output.</td><td>Success depends on task scoping and review quality.</td></tr><tr><td><strong>Strict privacy / controlled deployment</strong></td><td>Tabnine</td><td>Continue Company, Aider/Cline local stacks</td><td>Best when deployment control and governance dominate the buying decision.</td><td>Expect tradeoffs against frontier-showcase UX.</td></tr><tr><td><strong>Large codebase / brownfield complexity</strong></td><td>Claude Code</td><td>Augment, Windsurf</td><td>Context management and change discipline matter more than pretty demos.</td><td>Pilot on the real repo, not on a sandbox.</td></tr><tr><td><strong>Lowest-cost serious terminal stack</strong></td><td>Gemini CLI</td><td>Aider, OpenCode, Kilo</td><td>Best near-zero or BYOK path to legitimate agent workflows.</td><td>Expect more setup and more performance variance.</td></tr><tr><td><strong>Greenfield browser app building</strong></td><td>Lovable</td><td>Bolt, Replit</td><td>Best when the point is to move from intent to working app with minimal setup.</td><td>Prototype quality and production quality are not the same thing.</td></tr><tr><td><strong>UI-first web surfaces</strong></td><td>v0</td><td>Bolt, Lovable</td><td>Best prompt-to-interface path for React/Tailwind-heavy work.</td><td>Backend, data, and long-term maintenance still live elsewhere.</td></tr></tbody></table></div>
+        <div class="segmented" role="tablist" aria-label="Decision frameworks">
+          <button type="button" role="tab" data-panel="persona" aria-pressed="true">Persona</button><button type="button" role="tab" data-panel="workflow" aria-pressed="false">Workflow</button><button type="button" role="tab" data-panel="budget" aria-pressed="false">Budget</button><button type="button" role="tab" data-panel="codebase" aria-pressed="false">Codebase</button><button type="button" role="tab" data-panel="risk" aria-pressed="false">Risk</button>
+        </div>
+        <div class="decision-panel active" id="panel-persona"><article class="card" style="margin-top:12px;"><div class="kicker">Solo power user</div><h3>Claude Code + Cursor or Zed</h3><p>Use Claude for hard repo work, then stay in an editor you can live in all day. Choose Zed if you prefer platform composability over turnkey product polish.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">GitHub-first engineering manager</div><h3>GitHub Copilot + Codex</h3><p>Copilot standardizes broadly; Codex gives you a stronger heavy-duty escalation path across the same account surface area.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">JetBrains-heavy team lead</div><h3>Junie + Cline</h3><p>Junie reduces migration friction. Cline is the pressure-release valve when you need more model flexibility or stronger MCP usage.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Security-heavy platform owner</div><h3>Tabnine or Continue Company</h3><p>Start with the tools that let you define deployment boundaries, review rules, and data handling before you chase benchmark headlines.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Non-engineer builder or PM</div><h3>Lovable or Replit</h3><p>Use browser-native tools when you need momentum, collaboration, and an end-to-end visible build surface more than classic repo ergonomics.</p></article></div><div class="decision-panel " id="panel-workflow"><article class="card" style="margin-top:12px;"><div class="kicker">Deep refactor</div><h3>Claude Code</h3><p>The best current default when the work spans many files, demands planning, and has expensive failure modes.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Daily coding and debugging</div><h3>Cursor or Windsurf</h3><p>These make the most sense when the agent lives in the editor and you stay in a tight iteration loop.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Code review and enforcement</div><h3>Continue or GitHub Copilot</h3><p>Put AI at pull-request boundaries when you care more about consistent review than about generating more code.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Queued backlog work</div><h3>Jules</h3><p>Use async only when the task can be verified later. Jules is strongest when the work item has clean acceptance criteria.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">UI and product surface generation</div><h3>v0 or Lovable</h3><p>Front-end and product prototyping remain a different category from repository-heavy engineering.</p></article></div><div class="decision-panel " id="panel-budget"><article class="card" style="margin-top:12px;"><div class="kicker">Near-zero fixed cost</div><h3>Gemini CLI / Aider / Kilo</h3><p>You will trade polish for low entry cost and stronger responsibility for your own model choices.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Moderate predictable spend</div><h3>Cursor Pro / Claude Pro / Kiro Pro / Replit Core</h3><p>These are the practical middle where many individuals and small teams start.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Heavy frontier usage</div><h3>Claude Max / Cursor Pro+ or Ultra / Replit Pro</h3><p>Use only when saved developer time clearly dominates the bill.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Usage-based enterprise platform</div><h3>Augment / Tabnine / Copilot Enterprise / Continue Company</h3><p>The real question is rollout control and measurable productivity, not sticker price alone.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Browser-builder spend</div><h3>Lovable / Bolt / v0 / Replit</h3><p>Budget for platform usage plus downstream infrastructure or AI/cloud meters, not just the visible plan tier.</p></article></div><div class="decision-panel " id="panel-codebase"><article class="card" style="margin-top:12px;"><div class="kicker">Small greenfield app</div><h3>Cursor / Windsurf / Replit / Lovable</h3><p>Favor tools that reduce startup friction and keep momentum high.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Midsize product repo</div><h3>Cursor / Codex / Copilot</h3><p>Choose based on where your team already lives: IDE, GitHub, or ChatGPT.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Large monorepo</div><h3>Claude Code / Augment / Tabnine</h3><p>Context discipline and governance matter more than glossy prompt-to-app demos.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Legacy enterprise stack</div><h3>Junie / Kiro / Tabnine / Continue</h3><p>Pick tools that meet existing IDE, compliance, and transformation workflows where they already exist.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Mixed product and UI work</div><h3>v0 + Cursor or Copilot</h3><p>Use a UI generator for the surface and a real engineering tool for the repo.</p></article></div><div class="decision-panel " id="panel-risk"><article class="card" style="margin-top:12px;"><div class="kicker">Low-risk / high-control</div><h3>Aider / Cline / Continue / Tabnine</h3><p>Best when you want AI under explicit review, policy, and BYOK or deployment constraints.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Balanced</div><h3>Claude Code / Copilot / Cursor / Codex</h3><p>These tools offer strong assistance without requiring you to hand over the whole task queue.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Higher autonomy tolerated</div><h3>Jules / Devin / Antigravity</h3><p>Only use high-autonomy tools on work that can be reviewed, measured, and rolled back without drama.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Prototype risk is fine</div><h3>Lovable / Bolt / Replit / Opal</h3><p>Great for learning and iteration; just do not confuse speed-to-demo with software assurance.</p></article><article class="card" style="margin-top:12px;"><div class="kicker">Procurement risk</div><h3>Copilot / Tabnine / JetBrains</h3><p>These are easier to explain to security, finance, and existing IT owners than some fast-moving frontier startups.</p></article></div>
+      </div></section>
+      <section class="report-section" id="stacks" data-section-title="Recommended stacks"><div class="panel"><div class="section-label">Deployment guidance</div><h2>Recommended stacks</h2><p class="section-copy">The most resilient answer in 2026 is usually a stack: one tool for deep work, one for daily flow, and sometimes one for backlog delegation or review.</p><div class="stack-list"><article class="stack-item"><div class="stack-title">Technical default stack</div><h3>Claude Code + editor companion (Cursor or Zed) + CI review</h3><p>Best for serious engineers who want strong repo reasoning plus a comfortable daily editor. Add Continue or Copilot review if you want more structure at PR boundaries.</p></article><article class="stack-item"><div class="stack-title">GitHub-native org stack</div><h3>GitHub Copilot + Codex for escalation</h3><p>Copilot handles the broad rollout, code review, and GitHub-native agent flow. Codex becomes the heavier-duty option for developers who already spend real time in ChatGPT.</p></article><article class="stack-item"><div class="stack-title">Cost-controlled open stack</div><h3>Gemini CLI or Aider + Cline or Continue</h3><p>Use Gemini CLI for cheap/free terminal depth, Aider for git discipline, and Cline/Continue when you want editor presence or PR checks without a closed platform.</p></article><article class="stack-item"><div class="stack-title">JetBrains stack</div><h3>Junie + Cline + BYOK fallback</h3><p>Junie keeps teams in IntelliJ workflows. Cline gives you a more flexible escape hatch for MCP-heavy or provider-diverse work.</p></article><article class="stack-item"><div class="stack-title">Async plus interactive stack</div><h3>Jules + Cursor or Codex</h3><p>Use Jules for queueable ticket work and keep a strong synchronous tool for debugging, planning, and reviews. This is often better than forcing one tool to do both badly.</p></article><article class="stack-item"><div class="stack-title">Product-builder stack</div><h3>Lovable or Replit + v0 + engineering handoff tool</h3><p>Use browser builders for intent capture and fast iteration, v0 for front-end polish, then hand off to a real repo-centric workflow once the prototype earns a longer life.</p></article></div></div></section>
+      <section class="report-section" id="explorer" data-section-title="Tool explorer"><div class="panel"><div class="section-label">Interactive comparison</div><h2>Tool explorer</h2><p class="section-copy">Use search, category filters, sort controls, keyboard shortcuts, and deep links to build your short list.</p>
+        <div class="control-bar">
+          <div class="control-grid">
+            <input id="toolSearch" class="search" type="search" placeholder="Search tools, vendors, use cases, tags…" aria-label="Search tools" />
+            <select id="sortSelect" class="sort-select" aria-label="Sort tools"><option value="rank">Sort: Report order</option><option value="capability">Sort: Top-end capability</option><option value="cost">Sort: Cost efficiency</option><option value="control">Sort: Control / auditability</option><option value="enterprise">Sort: Team / enterprise fit</option><option value="evidence">Sort: Public evidence</option><option value="autonomy">Sort: Autonomy</option></select>
+            <button class="btn" id="expandVisible" type="button">Expand visible</button>
+            <button class="btn" id="collapseVisible" type="button">Collapse visible</button>
+          </div>
+          <div class="filter-row" id="tagFilters"><button type="button" data-tag="terminal">Terminal</button><button type="button" data-tag="ide-native">IDE-native</button><button type="button" data-tag="browser-native">Browser-native</button><button type="button" data-tag="async-first">Async</button><button type="button" data-tag="open-source">Open / OSS</button><button type="button" data-tag="byok">BYOK</button><button type="button" data-tag="enterprise">Enterprise</button><button type="button" data-tag="budget">Budget</button><button type="button" data-tag="legacy">Legacy code</button><button type="button" data-tag="greenfield">Greenfield</button><button type="button" data-tag="low-risk">Low risk</button><button type="button" data-tag="high-autonomy">High autonomy</button><button type="button" data-tag="jetbrains">JetBrains</button></div>
+          <div class="results-row"><div id="resultsCounter">Showing all 24 tools</div><div><button class="btn" id="clearFilters" type="button">Clear filters</button> <button class="btn" id="openShortcutModal" type="button">Shortcuts</button></div></div>
+        </div>
+        <div id="emptyState" class="empty-state"><strong>No tools match the current filters.</strong> Clear one or more chips, broaden the search term, or switch the sort order. This report intentionally keeps category boundaries strict, so some combinations will return nothing.</div>
+        <div class="tools-grid" id="toolGrid">
+    <details class="tool-card" id="claude-code" data-category="terminal" data-tags="anthropic high-capability ide-linked large-codebase legacy managed mcp sync-first team terminal terminal-native" data-search="claude code anthropic terminal the most defensible technical default for hard, ambiguous repository work. claude-backed stacks still have the strongest public coding signal in this set, but the exact benchmark evidence is model/harness-linked rather than a perfectly normalized ui product score. deep multi-file refactors, design-heavy debugging, large codebase exploration, high-stakes code review. your top constraint is fixed low cost, strict open/byok requirements, or fully unattended queue-based delegation. claude pro $20/month includes claude code; max starts at $100/month; api billing remains separate. anthropic high-capability ide-linked large-codebase legacy managed mcp sync-first team terminal terminal-native"
+      data-rank="1" data-capability="10" data-cost="5" data-control="7"
+      data-enterprise="8" data-evidence="9" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">terminal</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-high">High public evidence</span>
+            </div>
+            <h3>Claude Code <span>Anthropic</span></h3>
+            <p>The most defensible technical default for hard, ambiguous repository work. Claude-backed stacks still have the strongest public coding signal in this set, but the exact benchmark evidence is model/harness-linked rather than a perfectly normalized UI product score.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#claude-code" aria-label="Link to Claude Code">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">ide linked</span><span class="chip chip-soft">mcp</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">large codebase</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Deep multi-file refactors, design-heavy debugging, large codebase exploration, high-stakes code review.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>Your top constraint is fixed low cost, strict open/BYOK requirements, or fully unattended queue-based delegation.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Claude Pro $20/month includes Claude Code; Max starts at $100/month; API billing remains separate.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced: high autonomy is available, but it still rewards an operator who stays involved.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on packaging, surfaces, and extension model. High public signal on coding strength; medium confidence on claiming an exact product-to-product lead because benchmark reporting mixes model, harness, and surface.</p>
+            <div class="source-links"><a class="source-link" href="https://www.anthropic.com/product/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a><a class="source-link" href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">Claude pricing</a><a class="source-link" href="https://www.anthropic.com/news/claude-opus-4-6" target="_blank" rel="noopener noreferrer">Claude Opus 4.6</a><a class="source-link" href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener noreferrer">Claude Opus 4.7</a><a class="source-link" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk" target="_blank" rel="noopener noreferrer">Claude Agent SDK in Xcode</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="codex" data-category="terminal" data-tags="async-capable greenfield ide-linked legacy managed openai sync-first team terminal terminal-native" data-search="codex openai terminal the best value proposition for people already paying for chatgpt and wanting one coding agent across app, web, ide extension, and cli. it is less open than byok stacks, but its cross-surface coherence is unusually strong. chatgpt-centric developers, github-adjacent work, mixed interactive and asynchronous tasking, teams that want a single login and shared mental model across surfaces. you need an open stack, vendor-neutral model choice, or an apples-to-apples swe-bench product benchmark. included with paid chatgpt plans; heavier codex usage scales with higher tiers and optional extra credits. async-capable greenfield ide-linked legacy managed openai sync-first team terminal terminal-native"
+      data-rank="2" data-capability="9" data-cost="8" data-control="6"
+      data-enterprise="7" data-evidence="8" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">terminal</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-high">High public evidence</span>
+            </div>
+            <h3>Codex <span>OpenAI</span></h3>
+            <p>The best value proposition for people already paying for ChatGPT and wanting one coding agent across app, web, IDE extension, and CLI. It is less open than BYOK stacks, but its cross-surface coherence is unusually strong.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#codex" aria-label="Link to Codex">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">async capable</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">ide linked</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>ChatGPT-centric developers, GitHub-adjacent work, mixed interactive and asynchronous tasking, teams that want a single login and shared mental model across surfaces.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need an open stack, vendor-neutral model choice, or an apples-to-apples SWE-bench product benchmark.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Included with paid ChatGPT plans; heavier Codex usage scales with higher tiers and optional extra credits.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced: interactive enough for pair work, but also comfortable with queued or parallel task execution.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on availability and packaging. Strong official benchmark signal on Terminal-Bench 2.0, but that benchmark family is not directly interchangeable with SWE-bench Verified or SWE-Bench Pro.</p>
+            <div class="source-links"><a class="source-link" href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer">Codex</a><a class="source-link" href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer">Codex app</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-3-codex/" target="_blank" rel="noopener noreferrer">GPT-5.3-Codex</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-3-codex-spark/" target="_blank" rel="noopener noreferrer">Codex-Spark</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-4/" target="_blank" rel="noopener noreferrer">GPT-5.4</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="gemini-cli" data-category="terminal" data-tags="budget google greenfield large-codebase mcp open-source solo sync-first terminal terminal-native" data-search="gemini cli google terminal the best free/open-source terminal entry point in the current field. it combines a generous personal-account tier, 1m-context claims, multimodal tooling, and mcp support in a package that is far more serious than a throwaway freebie. budget-sensitive developers, whole-repo exploration, multimodal prompts, open-source-friendly terminal workflows. you need the safest current frontier default for hard bug-fix work or very mature enterprise governance. free tier with personal google account limits; gemini api key also supported. budget google greenfield large-codebase mcp open-source solo sync-first terminal terminal-native"
+      data-rank="3" data-capability="7" data-cost="10" data-control="8"
+      data-enterprise="5" data-evidence="6" data-autonomy="6">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">terminal</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Gemini CLI <span>Google</span></h3>
+            <p>The best free/open-source terminal entry point in the current field. It combines a generous personal-account tier, 1M-context claims, multimodal tooling, and MCP support in a package that is far more serious than a throwaway freebie.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#gemini-cli" aria-label="Link to Gemini CLI">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">budget</span><span class="chip chip-soft">mcp</span><span class="chip chip-soft">solo</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Budget-sensitive developers, whole-repo exploration, multimodal prompts, open-source-friendly terminal workflows.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need the safest current frontier default for hard bug-fix work or very mature enterprise governance.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free tier with personal Google account limits; Gemini API key also supported.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High control: terminal-first, extensible, and transparent enough to slot into existing shell habits.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on the product surface and quota details. Lower confidence on exact relative coding strength because public Google benchmark messaging leans more on model results than on a clean CLI product benchmark.</p>
+            <div class="source-links"><a class="source-link" href="https://github.com/google-gemini/gemini-cli" target="_blank" rel="noopener noreferrer">Gemini CLI</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="aider" data-category="terminal" data-tags="budget byok high-control legacy open-source solo sync-first terminal terminal-native" data-search="aider open source terminal still the clearest high-control, git-native terminal agent. its value is not proprietary intelligence; it is disciplined change management, transparent cost accounting, and vendor independence. developers who want ai edits to fit normal git review, rollback, and audit habits. you want an all-in-one managed platform, an ide-native daily driver, or seat-based enterprise packaging. free tool; model spend is entirely byok. budget byok high-control legacy open-source solo sync-first terminal terminal-native"
+      data-rank="4" data-capability="6" data-cost="9" data-control="10"
+      data-enterprise="5" data-evidence="6" data-autonomy="5">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">terminal</span>
+              <span class="chip chip-rating">Specialist</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Aider <span>Open source</span></h3>
+            <p>Still the clearest high-control, git-native terminal agent. Its value is not proprietary intelligence; it is disciplined change management, transparent cost accounting, and vendor independence.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#aider" aria-label="Link to Aider">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">high control</span><span class="chip chip-soft">budget</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Developers who want AI edits to fit normal git review, rollback, and audit habits.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want an all-in-one managed platform, an IDE-native daily driver, or seat-based enterprise packaging.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free tool; model spend is entirely BYOK.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Very high: this is one of the best tools for teams that distrust black-box editing and want every change reviewable.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>Strong confidence on its workflow posture and tradeoffs. Lower confidence on any implied benchmark parity because that depends entirely on the model and configuration you bring.</p>
+            <div class="source-links"><a class="source-link" href="https://aider.chat/" target="_blank" rel="noopener noreferrer">Aider</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="opencode" data-category="terminal" data-tags="budget byok high-control open-source solo sync-first team terminal terminal-native" data-search="opencode open source terminal a credible open-source terminal contender with plan/build modes, subagents, plugin hooks, and unusually broad model support. the architecture is compelling even if public proof is still thinner than the top closed leaders. developers who want oss, plan-first workflows, and broad provider flexibility without giving up modern agent patterns. you need the most battle-tested commercial support path or the cleanest enterprise procurement story. free with byok or tested provider options; opencode go starts at $10/month after a discounted first month. budget byok high-control open-source solo sync-first team terminal terminal-native"
+      data-rank="5" data-capability="7" data-cost="8" data-control="9"
+      data-enterprise="5" data-evidence="6" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">terminal</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>OpenCode <span>Open source</span></h3>
+            <p>A credible open-source terminal contender with plan/build modes, subagents, plugin hooks, and unusually broad model support. The architecture is compelling even if public proof is still thinner than the top closed leaders.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#opencode" aria-label="Link to OpenCode">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">high control</span><span class="chip chip-soft">budget</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Developers who want OSS, plan-first workflows, and broad provider flexibility without giving up modern agent patterns.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need the most battle-tested commercial support path or the cleanest enterprise procurement story.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free with BYOK or tested provider options; OpenCode Go starts at $10/month after a discounted first month.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High: the plan/build split and plugin model make it easier to keep autonomy on a leash.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>Good official documentation and product transparency; thinner independent evidence on relative top-end performance.</p>
+            <div class="source-links"><a class="source-link" href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode</a><a class="source-link" href="https://opencode.ai/go" target="_blank" rel="noopener noreferrer">OpenCode Go</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="jules" data-category="async" data-tags="async async-first backlog cloud google high-autonomy legacy managed pr-centric team" data-search="jules google async the cleanest example of why asynchronous agents deserve their own category. jules is not a better pair programmer than the best synchronous tools; it is a better backlog worker. queued ticket work, dependency chores, tests, repetitive fixes, work you want returned as a pull request later. you need fast back-and-forth debugging, dense design discussion, or exact budget and sla certainty while packaging remains fluid. still best treated as beta/public-preview style packaging with usage limits rather than a settled long-term pricing contract. async async-first backlog cloud google high-autonomy legacy managed pr-centric team"
+      data-rank="6" data-capability="7" data-cost="7" data-control="6"
+      data-enterprise="6" data-evidence="6" data-autonomy="9">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">async</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Jules <span>Google</span></h3>
+            <p>The cleanest example of why asynchronous agents deserve their own category. Jules is not a better pair programmer than the best synchronous tools; it is a better backlog worker.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#jules" aria-label="Link to Jules">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">async first</span><span class="chip chip-soft">cloud</span><span class="chip chip-soft">pr centric</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">legacy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Queued ticket work, dependency chores, tests, repetitive fixes, work you want returned as a pull request later.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need fast back-and-forth debugging, dense design discussion, or exact budget and SLA certainty while packaging remains fluid.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Still best treated as beta/public-preview style packaging with usage limits rather than a settled long-term pricing contract.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Moderate: you control scope and review, but the point is to stop babysitting the work while it runs.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on the workflow model, cloud VM, and API/CLI story. Lower confidence on exact comparative productivity versus top interactive tools.</p>
+            <div class="source-links"><a class="source-link" href="https://jules.google.com" target="_blank" rel="noopener noreferrer">Jules</a><a class="source-link" href="https://developers.googleblog.com/en/meet-jules-tools-a-command-line-companion-for-googles-async-coding-agent/" target="_blank" rel="noopener noreferrer">Jules tools</a><a class="source-link" href="https://developers.googleblog.com/en/level-up-your-dev-game-the-jules-api-is-here/" target="_blank" rel="noopener noreferrer">Jules API</a><a class="source-link" href="https://developers.googleblog.com/en/introducing-the-jules-extension-for-gemini-cli/" target="_blank" rel="noopener noreferrer">Jules VM workflow</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="devin" data-category="async" data-tags="async async-first backlog cloud cognition high-autonomy legacy managed team" data-search="devin cognition async devin still represents the most autonomy-forward end of the market. it is best understood as a delegation tool for bounded work, not as a universal substitute for interactive development. clearly specified tasks that benefit from a full remote environment and parallel execution. you want predictable fixed cost, light review burden, or conservative trust posture on ambiguous work. usage-sensitive and enterprise-leaning; treat cost modeling as a pilot exercise, not as a simple seat-price comparison. async async-first backlog cloud cognition high-autonomy legacy managed team"
+      data-rank="7" data-capability="8" data-cost="4" data-control="4"
+      data-enterprise="6" data-evidence="5" data-autonomy="10">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">async</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Devin <span>Cognition</span></h3>
+            <p>Devin still represents the most autonomy-forward end of the market. It is best understood as a delegation tool for bounded work, not as a universal substitute for interactive development.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#devin" aria-label="Link to Devin">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">async first</span><span class="chip chip-soft">cloud</span><span class="chip chip-soft">high autonomy</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">backlog</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Clearly specified tasks that benefit from a full remote environment and parallel execution.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want predictable fixed cost, light review burden, or conservative trust posture on ambiguous work.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Usage-sensitive and enterprise-leaning; treat cost modeling as a pilot exercise, not as a simple seat-price comparison.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Lower control than interactive tools; that is the point, but it increases review responsibility.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on architecture and feature direction. Lower confidence on extrapolating demos or splashy claims into real unattended production throughput.</p>
+            <div class="source-links"><a class="source-link" href="https://devin.ai/" target="_blank" rel="noopener noreferrer">Devin</a><a class="source-link" href="https://docs.devin.ai/release-notes/overview" target="_blank" rel="noopener noreferrer">Devin release notes</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="cursor" data-category="ide" data-tags="anysphere greenfield high-capability ide ide-native legacy managed mcp sync-first team" data-search="cursor anysphere ide the strongest daily-driver ide choice for vs code-centric users who want a mature agentic editing experience without moving their whole workflow into a terminal or browser. everyday coding, greenfield builds, mid-size product work, fast editor-centric iteration, teams comfortable standardizing on a vs code fork. you require a stock ide, a pure byok/open stack, or the simplest possible pricing model for teams. hobby free, pro $20/month, pro+ $60/month, ultra $200/month, teams $40/user/month. anysphere greenfield high-capability ide ide-native legacy managed mcp sync-first team"
+      data-rank="8" data-capability="9" data-cost="7" data-control="7"
+      data-enterprise="7" data-evidence="7" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">ide</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-high">High public evidence</span>
+            </div>
+            <h3>Cursor <span>Anysphere</span></h3>
+            <p>The strongest daily-driver IDE choice for VS Code-centric users who want a mature agentic editing experience without moving their whole workflow into a terminal or browser.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#cursor" aria-label="Link to Cursor">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">ide native</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">legacy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Everyday coding, greenfield builds, mid-size product work, fast editor-centric iteration, teams comfortable standardizing on a VS Code fork.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You require a stock IDE, a pure BYOK/open stack, or the simplest possible pricing model for teams.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Hobby free, Pro $20/month, Pro+ $60/month, Ultra $200/month, Teams $40/user/month.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced: strong agentic workflows with enough hooks and controls to feel usable rather than magical.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on packaging, product breadth, and workflow fit. Medium confidence on relative frontier rank because public benchmarking is still thinner than the hype around the product.</p>
+            <div class="source-links"><a class="source-link" href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer">Cursor pricing</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="windsurf" data-category="ide" data-tags="cognition greenfield ide ide-native jetbrains legacy managed mcp sync-first team" data-search="windsurf cognition ide the strongest alternative to cursor for users who want speed, local-plus-cloud flexibility, rich context tooling, and a more explicit multi-surface agent story. the caveat is that benchmark and pricing communication remain less straightforward than the very best-in-class documentation. users who want fast agent loops, strong context tooling, and a modern ide experience that is not afraid to add opinionated automation. you need simple procurement, clean public benchmark comparability, or the most conservative change-management posture. free, pro, max, teams, enterprise; self-serve pricing changed materially in march 2026 and usage remains model-sensitive. cognition greenfield ide ide-native jetbrains legacy managed mcp sync-first team"
+      data-rank="9" data-capability="9" data-cost="7" data-control="7"
+      data-enterprise="7" data-evidence="6" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">ide</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Windsurf <span>Cognition</span></h3>
+            <p>The strongest alternative to Cursor for users who want speed, local-plus-cloud flexibility, rich context tooling, and a more explicit multi-surface agent story. The caveat is that benchmark and pricing communication remain less straightforward than the very best-in-class documentation.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#windsurf" aria-label="Link to Windsurf">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">ide native</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">legacy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Users who want fast agent loops, strong context tooling, and a modern IDE experience that is not afraid to add opinionated automation.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need simple procurement, clean public benchmark comparability, or the most conservative change-management posture.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free, Pro, Max, Teams, Enterprise; self-serve pricing changed materially in March 2026 and usage remains model-sensitive.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced but increasingly autonomy-forward, especially as local and cloud agents converge.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on current product breadth. Medium-to-low confidence on simple one-number performance claims because public evidence relies heavily on in-house model positioning and vendor framing.</p>
+            <div class="source-links"><a class="source-link" href="https://windsurf.com/" target="_blank" rel="noopener noreferrer">Windsurf</a><a class="source-link" href="https://windsurf.com/blog/windsurf-pricing-plans" target="_blank" rel="noopener noreferrer">Windsurf pricing update</a><a class="source-link" href="https://docs.windsurf.com/windsurf/accounts/usage" target="_blank" rel="noopener noreferrer">Windsurf plans and usage</a><a class="source-link" href="https://docs.windsurf.com/windsurf/models" target="_blank" rel="noopener noreferrer">Windsurf models</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="zed" data-category="ide" data-tags="byok greenfield high-control ide ide-native legacy open-source solo sync-first zed-industries" data-search="zed zed industries ide the best choice for developers who prioritize editor speed and want ai to feel composable rather than monolithic. zed matters less as an off-the-shelf winner and more as a high-leverage platform for bring-your-own-agent workflows. performance-sensitive power users, minimalists, teams exploring acp/byoa rather than fully managed agent stacks. you need a polished enterprise rollout package with familiar admin and collaboration controls. pro includes token credits and accepted-edit benefits; ongoing usage is token-based rather than a simple unlimited seat price. byok greenfield high-control ide ide-native legacy open-source solo sync-first zed-industries"
+      data-rank="10" data-capability="7" data-cost="6" data-control="9"
+      data-enterprise="5" data-evidence="6" data-autonomy="5">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">ide</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Zed <span>Zed Industries</span></h3>
+            <p>The best choice for developers who prioritize editor speed and want AI to feel composable rather than monolithic. Zed matters less as an off-the-shelf winner and more as a high-leverage platform for bring-your-own-agent workflows.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#zed" aria-label="Link to Zed">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">ide native</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">high control</span><span class="chip chip-soft">solo</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Performance-sensitive power users, minimalists, teams exploring ACP/BYOA rather than fully managed agent stacks.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need a polished enterprise rollout package with familiar admin and collaboration controls.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Pro includes token credits and accepted-edit benefits; ongoing usage is token-based rather than a simple unlimited seat price.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High: excellent for users who want to decide which agent runs where rather than surrendering the whole experience to one vendor.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on the editor, open-platform direction, and BYOA posture. Lower confidence on comparing it directly to full-stack commercial IDE agents in out-of-box productivity.</p>
+            <div class="source-links"><a class="source-link" href="https://zed.dev/ai" target="_blank" rel="noopener noreferrer">Zed AI</a><a class="source-link" href="https://zed.dev/pricing" target="_blank" rel="noopener noreferrer">Zed pricing</a><a class="source-link" href="https://zed.dev/blog/bring-your-own-agent-to-zed" target="_blank" rel="noopener noreferrer">Bring your own agent to Zed</a><a class="source-link" href="https://blog.jetbrains.com/ai/2026/01/acp-agent-registry/" target="_blank" rel="noopener noreferrer">ACP registry</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="antigravity" data-category="ide" data-tags="async-capable google greenfield high-autonomy ide ide-native managed preview sync-first team" data-search="google antigravity google ide one of the most important previews in the category. antigravity pushes toward an editor-plus-manager model that coordinates work across editor, terminal, and browser. the idea is significant; the public evidence base is still too thin to treat it as the default enterprise answer. teams tracking where agentic development platforms may go next, especially multi-surface orchestration and artifact-based review. you need mature procurement, stable pricing, strong independent evidence, or a product that has clearly settled into its long-term operational shape. public preview / evolving; treat availability and packaging as fluid. async-capable google greenfield high-autonomy ide ide-native managed preview sync-first team"
+      data-rank="11" data-capability="7" data-cost="6" data-control="6"
+      data-enterprise="4" data-evidence="3" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">ide</span>
+              <span class="chip chip-rating">Experimental</span>
+              <span class="chip chip-confidence chip-low">Thin public evidence</span>
+            </div>
+            <h3>Google Antigravity <span>Google</span></h3>
+            <p>One of the most important previews in the category. Antigravity pushes toward an editor-plus-manager model that coordinates work across editor, terminal, and browser. The idea is significant; the public evidence base is still too thin to treat it as the default enterprise answer.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#antigravity" aria-label="Link to Google Antigravity">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">async capable</span><span class="chip chip-soft">ide native</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">preview</span><span class="chip chip-soft">team</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Teams tracking where agentic development platforms may go next, especially multi-surface orchestration and artifact-based review.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need mature procurement, stable pricing, strong independent evidence, or a product that has clearly settled into its long-term operational shape.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Public preview / evolving; treat availability and packaging as fluid.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Conceptually balanced: the manager surface promises verification and artifacts, but the platform is still early.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:30%"></span></span><span class="meter-label">3/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence that the product exists and the architectural direction matters. Low confidence on relative ranking because the public preview has more narrative than hard comparative data.</p>
+            <div class="source-links"><a class="source-link" href="https://developers.googleblog.com/build-with-google-antigravity-our-new-agentic-development-platform/" target="_blank" rel="noopener noreferrer">Antigravity</a><a class="source-link" href="https://ai.google/" target="_blank" rel="noopener noreferrer">Google AI</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="copilot" data-category="extension" data-tags="async-capable extension github-/-microsoft greenfield legacy low-risk managed sync-first team terminal-native" data-search="github copilot github / microsoft extension the safest default for github-heavy organizations because it is everywhere: ide, cli, github itself, code review, and cloud agent flows. it is not the most exotic or frontier-feeling option, but it is one of the easiest to operationalize at scale. github-native organizations, broad rollouts, mixed-skill teams, buyers who care about governance and familiarity as much as raw benchmark drama. you need an open-source stack, pure byok economics, or the most autonomous frontier behavior available today. free, pro, and pro+ plans use premium requests for agent mode, cli, code review, and cloud agent. enterprise tiers add governance and rollout controls. async-capable extension github-/-microsoft greenfield legacy low-risk managed sync-first team terminal-native"
+      data-rank="12" data-capability="8" data-cost="8" data-control="7"
+      data-enterprise="9" data-evidence="8" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-high">High public evidence</span>
+            </div>
+            <h3>GitHub Copilot <span>GitHub / Microsoft</span></h3>
+            <p>The safest default for GitHub-heavy organizations because it is everywhere: IDE, CLI, GitHub itself, code review, and cloud agent flows. It is not the most exotic or frontier-feeling option, but it is one of the easiest to operationalize at scale.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#copilot" aria-label="Link to GitHub Copilot">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">async capable</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>GitHub-native organizations, broad rollouts, mixed-skill teams, buyers who care about governance and familiarity as much as raw benchmark drama.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need an open-source stack, pure BYOK economics, or the most autonomous frontier behavior available today.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free, Pro, and Pro+ plans use premium requests for agent mode, CLI, code review, and cloud agent. Enterprise tiers add governance and rollout controls.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced and rollout-friendly: plan mode, agent mode, cloud agent, and CLI are easier to standardize than many competitors.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on packaging and platform depth. Lower confidence on a simple headline productivity rank because GitHub does not anchor the product with one single public benchmark number.</p>
+            <div class="source-links"><a class="source-link" href="https://github.com/features/copilot/plans" target="_blank" rel="noopener noreferrer">GitHub Copilot plans</a><a class="source-link" href="https://github.com/features/copilot/agents" target="_blank" rel="noopener noreferrer">GitHub Copilot agents</a><a class="source-link" href="https://github.com/features/copilot/cli" target="_blank" rel="noopener noreferrer">GitHub Copilot CLI</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="cline" data-category="extension" data-tags="byok extension high-control jetbrains legacy mcp open-source solo sync-first" data-search="cline open source extension the most credible open-source editor extension stack for developers who want modern agent behavior, plan/act controls, mcp, and model flexibility without buying into a closed editor or a managed credit economy. vs code or jetbrains users who want byok, control, and a very active open-source agent ecosystem. you want turnkey seat pricing, formal enterprise compliance, or minimal configuration overhead. the extension is free; spend is usage-based on whichever model or provider you connect. byok extension high-control jetbrains legacy mcp open-source solo sync-first"
+      data-rank="13" data-capability="8" data-cost="8" data-control="9"
+      data-enterprise="5" data-evidence="6" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Cline <span>Open source</span></h3>
+            <p>The most credible open-source editor extension stack for developers who want modern agent behavior, plan/act controls, MCP, and model flexibility without buying into a closed editor or a managed credit economy.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#cline" aria-label="Link to Cline">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">mcp</span><span class="chip chip-soft">high control</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>VS Code or JetBrains users who want BYOK, control, and a very active open-source agent ecosystem.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want turnkey seat pricing, formal enterprise compliance, or minimal configuration overhead.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>The extension is free; spend is usage-based on whichever model or provider you connect.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Very high: plan/act separation and provider choice make it one of the best tools for cautious but ambitious users.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>Strong confidence on workflow and product direction. Lower confidence on any exact benchmark headline because public performance messaging is vendor-reported and highly configuration-sensitive.</p>
+            <div class="source-links"><a class="source-link" href="https://cline.bot/" target="_blank" rel="noopener noreferrer">Cline</a><a class="source-link" href="https://cline.bot/pricing" target="_blank" rel="noopener noreferrer">Cline pricing</a><a class="source-link" href="https://cline.bot/jetbrains" target="_blank" rel="noopener noreferrer">Cline for JetBrains</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="augment" data-category="extension" data-tags="augment enterprise extension large-codebase legacy low-risk managed sync-first team" data-search="augment code augment extension one of the more serious enterprise context-engine stories in the market. the addition of intent makes the platform more interesting, because it extends augment from an ide assistant into a spec-aware workspace for coordinated work. large codebases, production teams, orgs that want context lineage, code review, and a platform view of ai development rather than just autocomplete. you are a solo hacker, need the cheapest entry point, or dislike credit-based pricing. indie $20/month, standard $60/month, max $200/month, enterprise custom with security and compliance controls. augment enterprise extension large-codebase legacy low-risk managed sync-first team"
+      data-rank="14" data-capability="8" data-cost="5" data-control="8"
+      data-enterprise="9" data-evidence="7" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Augment Code <span>Augment</span></h3>
+            <p>One of the more serious enterprise context-engine stories in the market. The addition of Intent makes the platform more interesting, because it extends Augment from an IDE assistant into a spec-aware workspace for coordinated work.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#augment" aria-label="Link to Augment Code">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">enterprise</span><span class="chip chip-soft">legacy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Large codebases, production teams, orgs that want context lineage, code review, and a platform view of AI development rather than just autocomplete.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You are a solo hacker, need the cheapest entry point, or dislike credit-based pricing.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Indie $20/month, Standard $60/month, Max $200/month, Enterprise custom with security and compliance controls.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High enough for enterprises: context, reviews, and spec-driven workflows are the real value, not raw agent bravado.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on the commercial packaging and enterprise posture. Medium confidence on comparative capability because public benchmark data is not the main story here.</p>
+            <div class="source-links"><a class="source-link" href="https://www.augmentcode.com/pricing" target="_blank" rel="noopener noreferrer">Augment pricing</a><a class="source-link" href="https://www.augmentcode.com/product/intent" target="_blank" rel="noopener noreferrer">Augment Intent</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="tabnine" data-category="extension" data-tags="enterprise extension high-control legacy low-risk managed sync-first tabnine team" data-search="tabnine tabnine extension the best fit when privacy, air-gapped deployment, governance, provenance, and controlled rollout matter more than winning social-media benchmark discourse. regulated teams, private deployments, organizations with strong security requirements or model-governance needs. you want the most frontier-feeling coding agent or the flashiest autonomous ux. code assistant platform $39/user/month annually; agentic platform $59/user/month annually, with additional usage nuance when tabnine-hosted models are used. enterprise extension high-control legacy low-risk managed sync-first tabnine team"
+      data-rank="15" data-capability="6" data-cost="6" data-control="10"
+      data-enterprise="10" data-evidence="8" data-autonomy="5">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Specialist</span>
+              <span class="chip chip-confidence chip-high">High public evidence</span>
+            </div>
+            <h3>Tabnine <span>Tabnine</span></h3>
+            <p>The best fit when privacy, air-gapped deployment, governance, provenance, and controlled rollout matter more than winning social-media benchmark discourse.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#tabnine" aria-label="Link to Tabnine">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">enterprise</span><span class="chip chip-soft">low risk</span><span class="chip chip-soft">legacy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Regulated teams, private deployments, organizations with strong security requirements or model-governance needs.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want the most frontier-feeling coding agent or the flashiest autonomous UX.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Code Assistant Platform $39/user/month annually; Agentic Platform $59/user/month annually, with additional usage nuance when Tabnine-hosted models are used.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Very high for enterprise governance: deployment choice, data handling, provenance, and policy controls are the selling points.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="meter-label">10/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on packaging, privacy, and deployment flexibility. Lower confidence on relative top-end agent capability because Tabnine positions itself around control and enterprise fitness rather than public coding benchmark leadership.</p>
+            <div class="source-links"><a class="source-link" href="https://www.tabnine.com/pricing/" target="_blank" rel="noopener noreferrer">Tabnine pricing</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="continue" data-category="extension" data-tags="byok code-review continue extension legacy low-risk open-source sync-first team" data-search="continue continue extension continue is now better understood as a source-controlled ai quality layer than as a generic autocomplete competitor. its strongest identity is running shared agents and checks around pull requests and engineering standards. teams that want ai in review, qa, or policy enforcement loops instead of only in the editor. you primarily want a polished daily interactive coding companion and do not need pr-centric workflows. starter is pay-as-you-go at $3 per million tokens; team is $20/seat/month with credits; company is custom with byok and enterprise controls. byok code-review continue extension legacy low-risk open-source sync-first team"
+      data-rank="16" data-capability="6" data-cost="8" data-control="9"
+      data-enterprise="7" data-evidence="7" data-autonomy="6">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Continue <span>Continue</span></h3>
+            <p>Continue is now better understood as a source-controlled AI quality layer than as a generic autocomplete competitor. Its strongest identity is running shared agents and checks around pull requests and engineering standards.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#continue" aria-label="Link to Continue">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">team</span><span class="chip chip-soft">low risk</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Teams that want AI in review, QA, or policy enforcement loops instead of only in the editor.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You primarily want a polished daily interactive coding companion and do not need PR-centric workflows.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Starter is pay-as-you-go at $3 per million tokens; Team is $20/seat/month with credits; Company is custom with BYOK and enterprise controls.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High: this is a standards and review tool as much as a coding tool.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:90%"></span></span><span class="meter-label">9/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on current pricing and positioning. Lower confidence on simple capability comparisons because its value comes from workflow placement, not headline benchmark scores.</p>
+            <div class="source-links"><a class="source-link" href="https://www.continue.dev/" target="_blank" rel="noopener noreferrer">Continue</a><a class="source-link" href="https://www.continue.dev/pricing" target="_blank" rel="noopener noreferrer">Continue pricing</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="kiro" data-category="extension" data-tags="aws extension legacy low-risk managed sync-first team terminal-native" data-search="kiro / amazon q developer aws extension still valuable for aws-heavy teams, especially around cloud operations and modernization, but the current naming split between amazon q developer and kiro adds avoidable market confusion. treat it as an aws-native option, not a general category winner. aws-centric development, cli plus ide usage, java or .net transformation work, organizations that already live inside aws identity and billing. you want the cleanest neutral developer experience outside aws or a stable product identity that is easy to explain to every buyer and developer. kiro free includes 50 credits; pro $20/month, pro+ $40/month, power $200/month. aws docs still reference amazon q developer tiers in places. aws extension legacy low-risk managed sync-first team terminal-native"
+      data-rank="17" data-capability="7" data-cost="8" data-control="7"
+      data-enterprise="8" data-evidence="7" data-autonomy="6">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Kiro / Amazon Q Developer <span>AWS</span></h3>
+            <p>Still valuable for AWS-heavy teams, especially around cloud operations and modernization, but the current naming split between Amazon Q Developer and Kiro adds avoidable market confusion. Treat it as an AWS-native option, not a general category winner.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#kiro" aria-label="Link to Kiro / Amazon Q Developer">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">aws</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>AWS-centric development, CLI plus IDE usage, Java or .NET transformation work, organizations that already live inside AWS identity and billing.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want the cleanest neutral developer experience outside AWS or a stable product identity that is easy to explain to every buyer and developer.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Kiro Free includes 50 credits; Pro $20/month, Pro+ $40/month, Power $200/month. AWS docs still reference Amazon Q Developer tiers in places.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Moderate-to-high: good for AWS workflows, but still more vendor-shaped than neutral-purpose tools.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on rebrand mechanics and pricing. Medium confidence on relative product rank outside AWS-native use cases.</p>
+            <div class="source-links"><a class="source-link" href="https://kiro.dev/pricing/" target="_blank" rel="noopener noreferrer">Kiro pricing</a><a class="source-link" href="https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/upgrade-to-kiro.html" target="_blank" rel="noopener noreferrer">Upgrade to Kiro</a><a class="source-link" href="https://aws.amazon.com/q/developer/" target="_blank" rel="noopener noreferrer">Amazon Q Developer</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="junie" data-category="extension" data-tags="byok extension jetbrains legacy low-risk managed sync-first team" data-search="junie jetbrains extension the best native answer for jetbrains-first teams. the product is stronger now that jetbrains has byok, an agent registry, and more explicit credit economics, but it still makes the most sense when you already prefer jetbrains over vs code forks. intellij-family teams, legacy enterprise code, developers who want agentic help without abandoning jetbrains workflows. you are vs code-first, need unlimited heavy agent usage, or prefer a simpler flat-price model without credit management. ai pro and ai ultimate tiers meter usage via ai credits; byok is also available in supported configurations. byok extension jetbrains legacy low-risk managed sync-first team"
+      data-rank="18" data-capability="7" data-cost="6" data-control="8"
+      data-enterprise="8" data-evidence="7" data-autonomy="6">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Junie <span>JetBrains</span></h3>
+            <p>The best native answer for JetBrains-first teams. The product is stronger now that JetBrains has BYOK, an agent registry, and more explicit credit economics, but it still makes the most sense when you already prefer JetBrains over VS Code forks.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#junie" aria-label="Link to Junie">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">jetbrains</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">byok</span><span class="chip chip-soft">team</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>IntelliJ-family teams, legacy enterprise code, developers who want agentic help without abandoning JetBrains workflows.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You are VS Code-first, need unlimited heavy agent usage, or prefer a simpler flat-price model without credit management.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>AI Pro and AI Ultimate tiers meter usage via AI Credits; BYOK is also available in supported configurations.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High enough for conservative teams, especially with BYOK and MCP/registry support.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on packaging and platform direction. Medium confidence on comparative top-end autonomy versus the strongest cross-surface competitors.</p>
+            <div class="source-links"><a class="source-link" href="https://www.jetbrains.com/junie/" target="_blank" rel="noopener noreferrer">Junie</a><a class="source-link" href="https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html" target="_blank" rel="noopener noreferrer">JetBrains AI pricing and usage</a><a class="source-link" href="https://blog.jetbrains.com/ai/2025/12/bring-your-own-key-byok-is-now-live-in-jetbrains-ides/" target="_blank" rel="noopener noreferrer">JetBrains BYOK</a><a class="source-link" href="https://blog.jetbrains.com/ai/2026/01/acp-agent-registry/" target="_blank" rel="noopener noreferrer">ACP registry</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="kilo" data-category="extension" data-tags="async-capable byok extension jetbrains open-source sync-first team terminal-native" data-search="kilo open source extension an ambitious open-source all-in-one platform that spans vs code, jetbrains, cli, cloud agents, and code review. it has the energy and breadth of a fast-moving ecosystem product, which is both its appeal and its risk. developers who want broad oss surface area, many agent modes, and freedom to mix local, hosted, and multi-editor workflows. you need a quiet, conservative product surface or a vendor that optimizes for minimal moving parts. open source; api keys optional; hosted commercial options exist but are not the core reason it belongs in this report. async-capable byok extension jetbrains open-source sync-first team terminal-native"
+      data-rank="19" data-capability="7" data-cost="8" data-control="8"
+      data-enterprise="4" data-evidence="5" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">extension</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Kilo <span>Open source</span></h3>
+            <p>An ambitious open-source all-in-one platform that spans VS Code, JetBrains, CLI, cloud agents, and code review. It has the energy and breadth of a fast-moving ecosystem product, which is both its appeal and its risk.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#kilo" aria-label="Link to Kilo">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">sync first</span><span class="chip chip-soft">async capable</span><span class="chip chip-soft">extension</span><span class="chip chip-soft">terminal native</span><span class="chip chip-soft">open source</span><span class="chip chip-soft">byok</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Developers who want broad OSS surface area, many agent modes, and freedom to mix local, hosted, and multi-editor workflows.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need a quiet, conservative product surface or a vendor that optimizes for minimal moving parts.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Open source; API keys optional; hosted commercial options exist but are not the core reason it belongs in this report.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>High: the platform is flexible enough to support many ways of working, but that flexibility also increases complexity.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence that the product is moving fast and broadening. Lower confidence on steady-state maturity and long-term standardization value versus calmer leaders.</p>
+            <div class="source-links"><a class="source-link" href="https://kilo.ai/" target="_blank" rel="noopener noreferrer">Kilo</a><a class="source-link" href="https://github.com/Kilo-Org/kilocode" target="_blank" rel="noopener noreferrer">Kilo repository</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="bolt" data-category="browser" data-tags="browser browser-native greenfield high-autonomy managed product-builder solo stackblitz" data-search="bolt.new stackblitz browser probably the fastest path from prompt to browser-based web app demo. it shines in the first mile: scaffolding, visual feedback, and quick iteration. it is not a substitute for disciplined application engineering, qa, or long-term architecture. hackathon apps, product demos, landing pages, frontend-heavy prototypes, non-developers with a clear web app concept. you are standardizing an engineering platform for a large team or expecting browser generation to replace architecture and testing. plan and usage details change frequently; treat it as a usage-sensitive builder rather than a simple fixed-cost ide substitute. browser browser-native greenfield high-autonomy managed product-builder solo stackblitz"
+      data-rank="20" data-capability="5" data-cost="6" data-control="4"
+      data-enterprise="3" data-evidence="4" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">browser</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-low">Thin public evidence</span>
+            </div>
+            <h3>Bolt.new <span>StackBlitz</span></h3>
+            <p>Probably the fastest path from prompt to browser-based web app demo. It shines in the first mile: scaffolding, visual feedback, and quick iteration. It is not a substitute for disciplined application engineering, QA, or long-term architecture.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#bolt" aria-label="Link to Bolt.new">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">browser native</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">solo</span><span class="chip chip-soft">product builder</span><span class="chip chip-soft">high autonomy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Hackathon apps, product demos, landing pages, frontend-heavy prototypes, non-developers with a clear web app concept.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You are standardizing an engineering platform for a large team or expecting browser generation to replace architecture and testing.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Plan and usage details change frequently; treat it as a usage-sensitive builder rather than a simple fixed-cost IDE substitute.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Lower control than terminal or IDE agents; its value is speed to prototype, not policy-rich change management.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:30%"></span></span><span class="meter-label">3/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on its role in the browser-builder category. Low confidence on direct comparability with serious coding agents for sustained production engineering work.</p>
+            <div class="source-links"><a class="source-link" href="https://stackblitz.com/" target="_blank" rel="noopener noreferrer">Bolt / StackBlitz</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="lovable" data-category="browser" data-tags="browser browser-native greenfield high-autonomy lovable managed product-builder team" data-search="lovable lovable browser the strongest browser-native builder for turning product intent into editable apps while preserving collaboration and a path into code. its core caveat is economic: subscription tiers are only part of the bill because cloud and ai usage remain a separate meter. product-led teams, internal tools, startup prototypes, non-engineers who still want a real code handoff path. you want one flat all-inclusive price or you are comparing it directly to terminal/ide agents for legacy engineering work. free and paid credit tiers exist; cloud and ai usage are billed separately, with temporary included allowances in current docs. browser browser-native greenfield high-autonomy lovable managed product-builder team"
+      data-rank="21" data-capability="6" data-cost="5" data-control="5"
+      data-enterprise="4" data-evidence="6" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">browser</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Lovable <span>Lovable</span></h3>
+            <p>The strongest browser-native builder for turning product intent into editable apps while preserving collaboration and a path into code. Its core caveat is economic: subscription tiers are only part of the bill because cloud and AI usage remain a separate meter.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#lovable" aria-label="Link to Lovable">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">browser native</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">product builder</span><span class="chip chip-soft">team</span><span class="chip chip-soft">high autonomy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Product-led teams, internal tools, startup prototypes, non-engineers who still want a real code handoff path.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want one flat all-inclusive price or you are comparing it directly to terminal/IDE agents for legacy engineering work.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Free and paid credit tiers exist; Cloud and AI usage are billed separately, with temporary included allowances in current docs.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Moderate: more editable and team-friendly than many browser builders, but still not the right control surface for regulated code change management.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on current plan mechanics and the separate billing model for AI/cloud usage. Medium confidence on long-run enterprise maintainability relative to traditional engineering stacks.</p>
+            <div class="source-links"><a class="source-link" href="https://lovable.dev/pricing" target="_blank" rel="noopener noreferrer">Lovable pricing</a><a class="source-link" href="https://docs.lovable.dev/introduction/plans-and-credits" target="_blank" rel="noopener noreferrer">Lovable plans and credits</a><a class="source-link" href="https://docs.lovable.dev/integrations/cloud" target="_blank" rel="noopener noreferrer">Lovable cloud and AI billing</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="replit" data-category="browser" data-tags="browser browser-native deploy greenfield managed product-builder replit team" data-search="replit replit browser the best all-in-one browser environment when building, running, deploying, and collaborating need to live in one place. replit matters because it owns the environment, not because it is the cleanest coding-agent benchmark story. full browser-native app building, collaborative greenfield work, teams that want runtime and editor in the same product. you want the cheapest experimentation path or you need a classic local-first engineering workflow. core is $20/month, pro starts at $100/month, and agent usage remains effort/credit-sensitive. browser browser-native deploy greenfield managed product-builder replit team"
+      data-rank="22" data-capability="7" data-cost="5" data-control="6"
+      data-enterprise="6" data-evidence="6" data-autonomy="8">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">browser</span>
+              <span class="chip chip-rating">Leader</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>Replit <span>Replit</span></h3>
+            <p>The best all-in-one browser environment when building, running, deploying, and collaborating need to live in one place. Replit matters because it owns the environment, not because it is the cleanest coding-agent benchmark story.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#replit" aria-label="Link to Replit">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">browser native</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">team</span><span class="chip chip-soft">product builder</span><span class="chip chip-soft">deploy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Full browser-native app building, collaborative greenfield work, teams that want runtime and editor in the same product.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You want the cheapest experimentation path or you need a classic local-first engineering workflow.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Core is $20/month, Pro starts at $100/month, and Agent usage remains effort/credit-sensitive.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Balanced inside its own environment, but still more platform-shaped than local development tools.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:80%"></span></span><span class="meter-label">8/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on current plan changes and Agent 4 direction. Lower confidence on any broad claim that its browser-native convenience automatically translates into the best engineering workflow for every team.</p>
+            <div class="source-links"><a class="source-link" href="https://replit.com/pricing" target="_blank" rel="noopener noreferrer">Replit pricing</a><a class="source-link" href="https://blog.replit.com/pro-plan" target="_blank" rel="noopener noreferrer">Replit Pro and Core changes</a><a class="source-link" href="https://blog.replit.com/introducing-agent-4-built-for-creativity" target="_blank" rel="noopener noreferrer">Replit Agent 4</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="v0" data-category="browser" data-tags="browser browser-native deploy frontend greenfield managed product-builder vercel" data-search="v0 vercel browser still one of the best tools for turning prompts into polished react/tailwind surfaces and vercel-ready web experiences. its strength is front-end and product surface generation, not comprehensive brownfield engineering. ui generation, landing pages, front-end components, design-system iteration, fast vercel deployment paths. you need a general-purpose coding agent for complex backend or legacy repository work. credit-based and plan-sensitive; vercel has updated pricing before, so check the current page rather than trusting old screenshots or threads. browser browser-native deploy frontend greenfield managed product-builder vercel"
+      data-rank="23" data-capability="6" data-cost="5" data-control="5"
+      data-enterprise="5" data-evidence="5" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">browser</span>
+              <span class="chip chip-rating">Strong fit</span>
+              <span class="chip chip-confidence chip-medium">Medium public evidence</span>
+            </div>
+            <h3>v0 <span>Vercel</span></h3>
+            <p>Still one of the best tools for turning prompts into polished React/Tailwind surfaces and Vercel-ready web experiences. Its strength is front-end and product surface generation, not comprehensive brownfield engineering.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#v0" aria-label="Link to v0">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">browser native</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">product builder</span><span class="chip chip-soft">frontend</span><span class="chip chip-soft">deploy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>UI generation, landing pages, front-end components, design-system iteration, fast Vercel deployment paths.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You need a general-purpose coding agent for complex backend or legacy repository work.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Credit-based and plan-sensitive; Vercel has updated pricing before, so check the current page rather than trusting old screenshots or threads.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Moderate: strong design and generation velocity, but not the most rigorous environment for deep engineering verification.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:50%"></span></span><span class="meter-label">5/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence on category fit. Lower confidence on exact comparative economics unless you price the current plan and the downstream Vercel infrastructure together.</p>
+            <div class="source-links"><a class="source-link" href="https://v0.dev/" target="_blank" rel="noopener noreferrer">v0</a><a class="source-link" href="https://vercel.com/blog/updated-v0-pricing" target="_blank" rel="noopener noreferrer">v0 pricing update</a><a class="source-link" href="https://vercel.com/pricing" target="_blank" rel="noopener noreferrer">Vercel pricing</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    
+    <details class="tool-card" id="opal" data-category="browser" data-tags="browser browser-native google-labs greenfield high-autonomy managed preview product-builder" data-search="opal google labs browser a useful inclusion because it shows how fast the browser-builder layer is absorbing prompt chaining and mini-app creation. but it is a workflow-app experiment, not a serious engineering default. mini-apps, demos, lightweight workflow tools, experimentation with natural-language app construction. you are evaluating software engineering platforms for professional development teams. experimental google labs product; packaging is secondary to category signaling at this stage. browser browser-native google-labs greenfield high-autonomy managed preview product-builder"
+      data-rank="24" data-capability="4" data-cost="6" data-control="3"
+      data-enterprise="2" data-evidence="3" data-autonomy="7">
+      <summary>
+        <div class="tool-head">
+          <div>
+            <div class="kicker-row">
+              <span class="chip chip-category">browser</span>
+              <span class="chip chip-rating">Experimental</span>
+              <span class="chip chip-confidence chip-low">Thin public evidence</span>
+            </div>
+            <h3>Opal <span>Google Labs</span></h3>
+            <p>A useful inclusion because it shows how fast the browser-builder layer is absorbing prompt chaining and mini-app creation. But it is a workflow-app experiment, not a serious engineering default.</p>
+          </div>
+          <div class="tool-actions">
+            <a class="deep-link" href="#opal" aria-label="Link to Opal">#</a>
+            <span class="summary-arrow" aria-hidden="true">▾</span>
+          </div>
+        </div>
+        <div class="tool-meta">
+          <span class="chip chip-soft">browser native</span><span class="chip chip-soft">greenfield</span><span class="chip chip-soft">managed</span><span class="chip chip-soft">preview</span><span class="chip chip-soft">product builder</span><span class="chip chip-soft">high autonomy</span>
+        </div>
+      </summary>
+      <div class="tool-body">
+        <div class="tool-grid">
+          <div class="tool-panel">
+            <h4>Best for</h4>
+            <p>Mini-apps, demos, lightweight workflow tools, experimentation with natural-language app construction.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Not ideal if</h4>
+            <p>You are evaluating software engineering platforms for professional development teams.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Pricing posture</h4>
+            <p>Experimental Google Labs product; packaging is secondary to category signaling at this stage.</p>
+          </div>
+          <div class="tool-panel">
+            <h4>Autonomy vs control</h4>
+            <p>Low-to-moderate: fast and expressive, but the wrong place to seek formal engineering governance.</p>
+          </div>
+        </div>
+        <div class="tool-scores">
+          <div>
+            <h4>Decision scores</h4>
+            <div class="score-grid"><div class="score-row"><span>Capability</span><span class="mini-meter" aria-hidden="true"><span style="width:40%"></span></span><span class="meter-label">4/10</span></div><div class="score-row"><span>Cost efficiency</span><span class="mini-meter" aria-hidden="true"><span style="width:60%"></span></span><span class="meter-label">6/10</span></div><div class="score-row"><span>Control</span><span class="mini-meter" aria-hidden="true"><span style="width:30%"></span></span><span class="meter-label">3/10</span></div><div class="score-row"><span>Team / enterprise fit</span><span class="mini-meter" aria-hidden="true"><span style="width:20%"></span></span><span class="meter-label">2/10</span></div><div class="score-row"><span>Public evidence</span><span class="mini-meter" aria-hidden="true"><span style="width:30%"></span></span><span class="meter-label">3/10</span></div><div class="score-row"><span>Autonomy</span><span class="mini-meter" aria-hidden="true"><span style="width:70%"></span></span><span class="meter-label">7/10</span></div></div>
+          </div>
+          <div>
+            <h4>Evidence note</h4>
+            <p>High confidence that it belongs in the browser-builder watchlist. Low confidence that it should rank anywhere near engineering-grade agent leaders.</p>
+            <div class="source-links"><a class="source-link" href="https://developers.googleblog.com/introducing-opal/" target="_blank" rel="noopener noreferrer">Opal</a><a class="source-link" href="https://labs.google/" target="_blank" rel="noopener noreferrer">Google Labs</a></div>
+          </div>
+        </div>
+      </div>
+    </details>
+    </div>
+      </div></section>
+      <section class="report-section" id="hype" data-section-title="Where hype exceeds evidence"><div class="panel"><div class="section-label">Caveats</div><h2>Where hype exceeds evidence</h2><p class="section-copy">This section exists to keep the report honest. Some categories look more mature than the public evidence really supports.</p><div class="grid-2" style="margin-top:18px;"><article class="card"><h3>Demo clips are not merge-rate data</h3><p>Most products still publish far less than teams actually need: rollback rate, review burden, escaped-defect rate, and cost per accepted change remain underreported.</p></article><article class="card"><h3>Model scores are not product scores</h3><p>A strong model can sit inside a weak workflow, and a weaker model can feel better in a stronger product harness. This report never treats those as the same thing.</p></article><article class="card"><h3>Seat price is not total cost</h3><p>Overages, credits, prompt classes, cloud runtime, and downstream infrastructure can easily dominate the visible sticker price.</p></article><article class="card"><h3>Browser-native builders look more complete than they are</h3><p>The first mile is stunning. The second mile—testing, data modeling, auth hardening, observability, maintainability—still decides whether the result survives contact with production.</p></article></div><div class="card" style="margin-top:16px;"><div class="kicker">What still lacks good public data</div><ul class="bullet-list"><li>Real merge or rollback rates by task class.</li><li>Time saved after review, not before review.</li><li>Reliable cost-per-accepted-change across model tiers and overages.</li><li>Performance on mixed-language monorepos and legacy enterprise codebases.</li><li>False-positive and false-negative rates for AI review agents.</li><li>Safety outcomes when agents get broad repo, terminal, and external-tool access.</li></ul></div></div></section>
+      <section class="report-section" id="antipatterns" data-section-title="Anti-patterns"><div class="panel"><div class="section-label">Avoidable mistakes</div><h2>Anti-patterns / when not to use these tools</h2><p class="section-copy">A large share of failed pilots come from category mistakes, not from bad models.</p><div class="grid-2" style="margin-top:18px;"><article class="card"><h3>Anti-pattern 1</h3><p>Buying one tool and forcing it into every workflow, even when async and sync work want different surfaces.</p></article><article class="card"><h3>Anti-pattern 2</h3><p>Using browser builders as proof that production engineering is solved.</p></article><article class="card"><h3>Anti-pattern 3</h3><p>Comparing plan prices without modeling credits, overages, API billing, or cloud/runtime charges.</p></article><article class="card"><h3>Anti-pattern 4</h3><p>Piloting on toy repos and extrapolating the result to legacy codebases or regulated environments.</p></article><article class="card"><h3>Anti-pattern 5</h3><p>Rolling out high-autonomy agents before defining review ownership, rollback norms, and allowed tools.</p></article><article class="card"><h3>Anti-pattern 6</h3><p>Treating vendor install counts, stars, or social proof as evidence of enterprise standardization success.</p></article></div></div></section>
+      <section class="report-section" id="checklist" data-section-title="Evaluation checklist"><div class="panel"><div class="section-label">Pilot checklist</div><h2>Evaluation checklist for teams piloting AI coding agents</h2><p class="section-copy">Use this before you standardize anything across a team or organization.</p><div class="grid-3" style="margin-top:18px;"><article class="card"><h3>Check 1</h3><p>Define your primary workflow: pair-programming, backlog delegation, review, UI generation, or legacy modernization.</p></article><article class="card"><h3>Check 2</h3><p>Run the pilot on a real repo with at least one ugly task, one ambiguous task, and one maintenance task.</p></article><article class="card"><h3>Check 3</h3><p>Measure review time, rollback rate, and accepted changes—not just lines generated or benchmark excitement.</p></article><article class="card"><h3>Check 4</h3><p>Model the true cost with credits, overages, API keys, cloud usage, and downstream deployment costs.</p></article><article class="card"><h3>Check 5</h3><p>Decide what the agent may read, write, run, and connect to before broad rollout.</p></article><article class="card"><h3>Check 6</h3><p>Test small-team rollout mechanics: SSO, seat management, audit logs, model controls, and support path.</p></article><article class="card"><h3>Check 7</h3><p>Check whether the tool fits your actual editor and repository habits instead of asking people to switch everything at once.</p></article><article class="card"><h3>Check 8</h3><p>Force at least one brownfield task into the pilot if the target environment is not greenfield.</p></article><article class="card"><h3>Check 9</h3><p>Check how the tool behaves when prompts are underspecified, wrong, or contradictory.</p></article><article class="card"><h3>Check 10</h3><p>Verify how easy it is to stop, redirect, or recover from a bad autonomous trajectory.</p></article><article class="card"><h3>Check 11</h3><p>Validate whether generated artifacts, PRs, and explanations are good enough for review—not just for demos.</p></article><article class="card"><h3>Check 12</h3><p>Write down the exit plan: what happens if you need to switch models, vendors, or deployment mode six months later.</p></article></div></div></section>
+      <section class="report-section" id="watchlist" data-section-title="Watchlist"><div class="panel"><div class="section-label">Emerging shifts</div><h2>Watchlist / emerging tools and trends</h2><p class="section-copy">These are the developments most likely to reshape how this market is discussed over the next few quarters.</p><div class="grid-2" style="margin-top:18px;"><article class="card"><h3>Spec-first multi-agent workspaces</h3><p>Intent and similar products suggest a shift from prompt-driven editing toward living specs that coordinate multiple isolated worktrees.</p></article><article class="card"><h3>Bring-your-own-agent ecosystems</h3><p>JetBrains ACP and Zed’s BYOA direction matter because they make the UI layer less dependent on one vendor’s agent.</p></article><article class="card"><h3>Agent teams</h3><p>Anthropic’s agent teams research preview is a signal that multi-agent orchestration is becoming a first-class product primitive rather than a power-user hack.</p></article><article class="card"><h3>Cloud agent convergence</h3><p>Windsurf, Codex, Jules, Devin, and Antigravity are all moving toward mixed local/cloud workflows, which may reshape how teams split interactive and delegated work.</p></article><article class="card"><h3>Review-first AI</h3><p>Continue, Copilot review, and platform QA agents may prove easier to scale than unrestricted coding agents because the trust boundary is narrower.</p></article><article class="card"><h3>Kiro / Amazon Q identity consolidation</h3><p>AWS still has an opportunity to simplify the story for developers and buyers. If that lands, its cloud-native advantage could become easier to recommend.</p></article></div></div></section>
+      <section class="report-section" id="sources" data-section-title="Sources and notes"><div class="panel"><div class="section-label">Source path</div><h2>Sources and notes</h2><p class="section-copy">The report prioritizes official product pages, pricing pages, docs, and first-party launch or update posts. Vendor-reported performance claims are marked as such.</p>
+        <div class="card" style="margin-top:18px;"><p>This report deliberately favors official product pages, pricing pages, first-party documentation, and first-party launch/update posts. Where a product’s public evidence is thin or primarily vendor-reported, the prose is intentionally more conservative.</p></div>
+        <div class="source-grid"><article class='source-card'><h3>Anthropic</h3><div class="source-links"><a class="source-link" href="https://www.anthropic.com/product/claude-code" target="_blank" rel="noopener noreferrer">Claude Code</a><a class="source-link" href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">Claude pricing</a><a class="source-link" href="https://www.anthropic.com/news/claude-opus-4-6" target="_blank" rel="noopener noreferrer">Claude Opus 4.6</a><a class="source-link" href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank" rel="noopener noreferrer">Claude Opus 4.7</a><a class="source-link" href="https://www.anthropic.com/news/apple-xcode-claude-agent-sdk" target="_blank" rel="noopener noreferrer">Claude Agent SDK in Xcode</a></div></article><article class='source-card'><h3>OpenAI</h3><div class="source-links"><a class="source-link" href="https://openai.com/codex/" target="_blank" rel="noopener noreferrer">Codex</a><a class="source-link" href="https://openai.com/index/introducing-the-codex-app/" target="_blank" rel="noopener noreferrer">Codex app</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-3-codex/" target="_blank" rel="noopener noreferrer">GPT-5.3-Codex</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-3-codex-spark/" target="_blank" rel="noopener noreferrer">Codex-Spark</a><a class="source-link" href="https://openai.com/index/introducing-gpt-5-4/" target="_blank" rel="noopener noreferrer">GPT-5.4</a></div></article><article class='source-card'><h3>Google</h3><div class="source-links"><a class="source-link" href="https://github.com/google-gemini/gemini-cli" target="_blank" rel="noopener noreferrer">Gemini CLI</a><a class="source-link" href="https://jules.google.com" target="_blank" rel="noopener noreferrer">Jules</a><a class="source-link" href="https://developers.googleblog.com/en/level-up-your-dev-game-the-jules-api-is-here/" target="_blank" rel="noopener noreferrer">Jules API</a><a class="source-link" href="https://developers.googleblog.com/build-with-google-antigravity-our-new-agentic-development-platform/" target="_blank" rel="noopener noreferrer">Antigravity</a><a class="source-link" href="https://labs.google/" target="_blank" rel="noopener noreferrer">Google Labs</a></div></article><article class='source-card'><h3>GitHub</h3><div class="source-links"><a class="source-link" href="https://github.com/features/copilot/plans" target="_blank" rel="noopener noreferrer">GitHub Copilot plans</a><a class="source-link" href="https://github.com/features/copilot/agents" target="_blank" rel="noopener noreferrer">GitHub Copilot agents</a><a class="source-link" href="https://github.com/features/copilot/cli" target="_blank" rel="noopener noreferrer">GitHub Copilot CLI</a></div></article><article class='source-card'><h3>Cursor / Windsurf / Zed</h3><div class="source-links"><a class="source-link" href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer">Cursor pricing</a><a class="source-link" href="https://windsurf.com/blog/windsurf-pricing-plans" target="_blank" rel="noopener noreferrer">Windsurf pricing update</a><a class="source-link" href="https://docs.windsurf.com/windsurf/models" target="_blank" rel="noopener noreferrer">Windsurf models</a><a class="source-link" href="https://zed.dev/ai" target="_blank" rel="noopener noreferrer">Zed AI</a><a class="source-link" href="https://zed.dev/pricing" target="_blank" rel="noopener noreferrer">Zed pricing</a></div></article><article class='source-card'><h3>JetBrains / AWS / Augment / Tabnine / Continue</h3><div class="source-links"><a class="source-link" href="https://www.jetbrains.com/junie/" target="_blank" rel="noopener noreferrer">Junie</a><a class="source-link" href="https://www.jetbrains.com/help/ai-assistant/licensing-and-subscriptions.html" target="_blank" rel="noopener noreferrer">JetBrains AI pricing and usage</a><a class="source-link" href="https://kiro.dev/pricing/" target="_blank" rel="noopener noreferrer">Kiro pricing</a><a class="source-link" href="https://www.augmentcode.com/pricing" target="_blank" rel="noopener noreferrer">Augment pricing</a><a class="source-link" href="https://www.tabnine.com/pricing/" target="_blank" rel="noopener noreferrer">Tabnine pricing</a><a class="source-link" href="https://www.continue.dev/pricing" target="_blank" rel="noopener noreferrer">Continue pricing</a></div></article><article class='source-card'><h3>Open source terminal and extension tools</h3><div class="source-links"><a class="source-link" href="https://aider.chat/" target="_blank" rel="noopener noreferrer">Aider</a><a class="source-link" href="https://opencode.ai/" target="_blank" rel="noopener noreferrer">OpenCode</a><a class="source-link" href="https://opencode.ai/go" target="_blank" rel="noopener noreferrer">OpenCode Go</a><a class="source-link" href="https://cline.bot/" target="_blank" rel="noopener noreferrer">Cline</a><a class="source-link" href="https://kilo.ai/" target="_blank" rel="noopener noreferrer">Kilo</a><a class="source-link" href="https://github.com/Kilo-Org/kilocode" target="_blank" rel="noopener noreferrer">Kilo repository</a></div></article><article class='source-card'><h3>Browser builders</h3><div class="source-links"><a class="source-link" href="https://docs.lovable.dev/introduction/plans-and-credits" target="_blank" rel="noopener noreferrer">Lovable plans and credits</a><a class="source-link" href="https://docs.lovable.dev/integrations/cloud" target="_blank" rel="noopener noreferrer">Lovable cloud and AI billing</a><a class="source-link" href="https://replit.com/pricing" target="_blank" rel="noopener noreferrer">Replit pricing</a><a class="source-link" href="https://blog.replit.com/introducing-agent-4-built-for-creativity" target="_blank" rel="noopener noreferrer">Replit Agent 4</a><a class="source-link" href="https://v0.dev/" target="_blank" rel="noopener noreferrer">v0</a><a class="source-link" href="https://developers.googleblog.com/introducing-opal/" target="_blank" rel="noopener noreferrer">Opal</a></div></article></div>
+      </div></section>
+      <footer>
+        <p>Standalone HTML report generated as a full-file rewrite of the attached base document. No external fonts, inline handlers, or framework dependencies are required. Re-audit quarterly if you plan to use it for procurement or team standardization.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const progressBar = document.getElementById('progressBar');
+      const tocLinks = [...document.querySelectorAll('#tocNav a')];
+      const sections = [...document.querySelectorAll('section.report-section')];
+      const toolGrid = document.getElementById('toolGrid');
+      const toolCards = () => [...toolGrid.querySelectorAll('.tool-card')];
+      const searchInput = document.getElementById('toolSearch');
+      const sortSelect = document.getElementById('sortSelect');
+      const resultCounter = document.getElementById('resultsCounter');
+      const emptyState = document.getElementById('emptyState');
+      const expandVisibleBtn = document.getElementById('expandVisible');
+      const collapseVisibleBtn = document.getElementById('collapseVisible');
+      const clearFiltersBtn = document.getElementById('clearFilters');
+      const filterButtons = [...document.querySelectorAll('#tagFilters button')];
+      const shortcutModal = document.getElementById('shortcutModal');
+      const openShortcutModal = document.getElementById('openShortcutModal');
+      const closeShortcutModal = document.getElementById('closeShortcutModal');
+      const decisionButtons = [...document.querySelectorAll('[role="tab"][data-panel]')];
+      const decisionPanels = [...document.querySelectorAll('.decision-panel')];
+      const activeTags = new Set();
+
+      function syncProgress() {
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = height > 0 ? (scrollTop / height) * 100 : 0;
+        progressBar.style.width = pct + '%';
+      }
+
+      function syncTOC() {
+        let current = sections[0]?.id;
+        const threshold = window.scrollY + 140;
+        sections.forEach(section => {
+          if (section.offsetTop <= threshold) current = section.id;
+        });
+        tocLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+
+      function normalize(text) {
+        return (text || '').toLowerCase().trim();
+      }
+
+      function sortCards(cards) {
+        const key = sortSelect.value;
+        const sorted = [...cards].sort((a, b) => {
+          if (key === 'rank') return Number(a.dataset.rank) - Number(b.dataset.rank);
+          const av = Number(a.dataset[key] || 0);
+          const bv = Number(b.dataset[key] || 0);
+          if (bv !== av) return bv - av;
+          return Number(a.dataset.rank) - Number(b.dataset.rank);
+        });
+        sorted.forEach(card => toolGrid.appendChild(card));
+      }
+
+      function applyFilters() {
+        const query = normalize(searchInput.value);
+        const cards = toolCards();
+        let visible = 0;
+        cards.forEach(card => {
+          const haystack = card.dataset.search || '';
+          const tags = (card.dataset.tags || '').split(/\s+/).filter(Boolean);
+          const matchesSearch = !query || haystack.includes(query);
+          const matchesTags = [...activeTags].every(tag => tags.includes(tag));
+          const show = matchesSearch && matchesTags;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+        sortCards(cards);
+        resultCounter.textContent = visible === cards.length ? `Showing all ${cards.length} tools` : `Showing ${visible} of ${cards.length} tools`;
+        emptyState.classList.toggle('show', visible === 0);
+      }
+
+      function expandVisible(openState) {
+        toolCards().forEach(card => {
+          if (!card.hidden) card.open = openState;
+        });
+      }
+
+      function clearFilters() {
+        activeTags.clear();
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        searchInput.value = '';
+        sortSelect.value = 'rank';
+        applyFilters();
+      }
+
+      function openHashTarget() {
+        const hash = window.location.hash.replace('#', '');
+        if (!hash) return;
+        const el = document.getElementById(hash);
+        if (!el) return;
+        if (el.classList.contains('tool-card')) el.open = true;
+      }
+
+      function toggleModal(open) {
+        shortcutModal.classList.toggle('open', open);
+        shortcutModal.setAttribute('aria-hidden', String(!open));
+      }
+
+      filterButtons.forEach(btn => btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (!tag) return;
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+          btn.classList.remove('active');
+        } else {
+          activeTags.add(tag);
+          btn.classList.add('active');
+        }
+        applyFilters();
+      }));
+
+      searchInput.addEventListener('input', applyFilters);
+      sortSelect.addEventListener('change', applyFilters);
+      expandVisibleBtn.addEventListener('click', () => expandVisible(true));
+      collapseVisibleBtn.addEventListener('click', () => expandVisible(false));
+      clearFiltersBtn.addEventListener('click', clearFilters);
+      openShortcutModal.addEventListener('click', () => toggleModal(true));
+      closeShortcutModal.addEventListener('click', () => toggleModal(false));
+      shortcutModal.addEventListener('click', (event) => { if (event.target === shortcutModal) toggleModal(false); });
+      document.addEventListener('keydown', (event) => {
+        const target = event.target;
+        const tag = target && target.tagName ? target.tagName.toLowerCase() : '';
+        const inField = tag === 'input' || tag === 'textarea' || tag === 'select' || target?.isContentEditable;
+        if (event.key === '/' && !inField) { event.preventDefault(); searchInput.focus(); searchInput.select(); return; }
+        if (event.key === '?' && !inField) { event.preventDefault(); toggleModal(!shortcutModal.classList.contains('open')); return; }
+        if (event.key.toLowerCase() === 'e' && !inField) { expandVisible(true); return; }
+        if (event.key.toLowerCase() === 'c' && !inField) { expandVisible(false); return; }
+        if (event.key.toLowerCase() === 't' && !inField) { window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
+        if (event.key === 'Escape') toggleModal(false);
+      });
+
+      decisionButtons.forEach(btn => btn.addEventListener('click', () => {
+        const panel = btn.dataset.panel;
+        decisionButtons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+        decisionPanels.forEach(p => p.classList.toggle('active', p.id === `panel-${panel}`));
+      }));
+
+      window.addEventListener('scroll', () => { syncProgress(); syncTOC(); }, { passive: true });
+      window.addEventListener('hashchange', openHashTarget);
+      applyFilters();
+      syncProgress();
+      syncTOC();
+      openHashTarget();
+    })();
+  </script>
+</body>
+</html>
