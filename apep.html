@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apple vs PepsiCo: Was selling AAPL before Apple Intelligence a mistake?</title>
+  <meta name="description" content="A shareable analysis of whether trading Apple stock for PepsiCo made sense around Apple's Apple Intelligence reveal, with a live TradingView chart.">
+  <style>
+    :root {
+      --bg: #070a12;
+      --panel: rgba(255,255,255,0.075);
+      --panel2: rgba(255,255,255,0.105);
+      --text: #f5f7fb;
+      --muted: #aab2c5;
+      --line: rgba(255,255,255,0.16);
+      --green: #6ee7b7;
+      --blue: #93c5fd;
+      --red: #fda4af;
+      --gold: #fde68a;
+      --shadow: 0 30px 80px rgba(0,0,0,0.38);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(59,130,246,0.22), transparent 34%),
+        radial-gradient(circle at 88% 5%, rgba(16,185,129,0.16), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(244,63,94,0.13), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: #bfdbfe; }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 20px 64px;
+    }
+    .hero {
+      padding: 38px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.045));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero:before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(120deg, rgba(147,197,253,0.18), transparent 36%, rgba(110,231,183,0.12));
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #dbeafe;
+      background: rgba(147,197,253,0.13);
+      border: 1px solid rgba(147,197,253,0.25);
+      font-size: 13px;
+      letter-spacing: .02em;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: .98;
+      letter-spacing: -0.055em;
+      max-width: 960px;
+    }
+    .lede {
+      max-width: 880px;
+      font-size: clamp(17px, 2.2vw, 22px);
+      color: #d5dbea;
+      margin: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      backdrop-filter: blur(10px);
+    }
+    .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    @media (max-width: 900px) {
+      .span-4, .span-6, .span-8 { grid-column: span 12; }
+      .hero { padding: 26px; }
+    }
+    .kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .big {
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+      margin: 4px 0 8px;
+    }
+    .muted { color: var(--muted); }
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .blue { color: var(--blue); }
+    .gold { color: var(--gold); }
+    .chart {
+      min-height: 620px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .chart-head {
+      padding: 22px 22px 0;
+    }
+    .tvbox {
+      height: 560px;
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      background: #05070d;
+    }
+    .tradingview-widget-container, .tradingview-widget-container__widget {
+      height: 100%;
+      width: 100%;
+    }
+    h2 {
+      margin: 0 0 12px;
+      letter-spacing: -0.035em;
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1.1;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+    p { margin: 0 0 13px; }
+    .answer {
+      font-size: 20px;
+      color: #e7ecf8;
+    }
+    .math {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .row:last-child { border-bottom: 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.07);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #dbe4f4;
+      margin: 4px 6px 0 0;
+    }
+    .barwrap {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #d5dbea;
+      margin-bottom: 6px;
+    }
+    .bar-bg {
+      height: 16px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+    .aaplbar { width: 24%; background: linear-gradient(90deg, rgba(147,197,253,0.65), rgba(110,231,183,0.95)); }
+    .pepbar { width: 17%; background: linear-gradient(90deg, rgba(253,164,175,0.8), rgba(253,230,138,0.7)); }
+    .note {
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 18px;
+      padding-top: 14px;
+    }
+    .sources {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .sources li { margin: 7px 0; }
+    .print-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+    .print-btn:hover { background: rgba(255,255,255,0.16); }
+    @media print {
+      body { background: #fff; color: #111827; }
+      .hero, .card { background: #fff; box-shadow: none; border: 1px solid #d1d5db; }
+      .muted, .sources { color: #4b5563; }
+      .print-btn, .chart { display: none; }
+      a { color: #1d4ed8; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">AAPL vs PEP • AI-unveil trade check</div>
+      <h1>Was trading Apple for PepsiCo before Apple Intelligence a mistake?</h1>
+      <p class="lede">
+        The defensive-income logic was understandable. The timing was not. Once Apple Intelligence became a market catalyst, the realized opportunity cost was meaningful.
+      </p>
+      <button class="print-btn" onclick="window.print()">Print / save as PDF</button>
+    </section>
+
+    <section class="grid">
+      <article class="card span-4">
+        <div class="kicker">Current snapshot</div>
+        <h3>Apple</h3>
+        <div class="big blue">$311.93</div>
+        <p class="muted">AAPL current quote snapshot used for this page. P/E: about 37.76.</p>
+        <span class="pill">Growth/platform exposure</span>
+        <span class="pill">AI narrative</span>
+      </article>
+
+      <article class="card span-4">
+        <div class="kicker">Current snapshot</div>
+        <h3>PepsiCo</h3>
+        <div class="big gold">$142.46</div>
+        <p class="muted">PEP current quote snapshot used for this page. P/E: about 22.37.</p>
+        <span class="pill">Defensive staples</span>
+        <span class="pill">Income tilt</span>
+      </article>
+
+      <article class="card span-4">
+        <div class="kicker">Core conclusion</div>
+        <div class="big">Do not default-swap.</div>
+        <p class="muted">
+          A full Apple-to-PepsiCo swap only makes sense if the investor is deliberately reducing growth exposure for income, lower volatility, and defensive positioning.
+        </p>
+      </article>
+
+      <article class="card span-12 chart">
+        <div class="chart-head">
+          <div class="kicker">Live chart</div>
+          <h2>Apple with PepsiCo comparison</h2>
+          <p class="muted">
+            This TradingView chart loads live/delayed market data when the page is opened. AAPL is primary; PEP is added as a comparison symbol when supported by the widget.
+          </p>
+        </div>
+        <div class="tvbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+            {
+              "autosize": true,
+              "symbol": "NASDAQ:AAPL",
+              "interval": "D",
+              "timezone": "Etc/UTC",
+              "theme": "dark",
+              "style": "1",
+              "locale": "en",
+              "allow_symbol_change": true,
+              "calendar": false,
+              "details": true,
+              "hotlist": false,
+              "hide_side_toolbar": false,
+              "support_host": "https://www.tradingview.com",
+              "compareSymbols": [
+                {
+                  "symbol": "NASDAQ:PEP",
+                  "position": "SameScale"
+                }
+              ]
+            }
+            </script>
+          </div>
+        </div>
+      </article>
+
+      <article class="card span-8">
+        <div class="kicker">Plain-English answer</div>
+        <p class="answer">
+          Perplexity was mostly right on the portfolio logic, but too soft on the realized timing cost.
+        </p>
+        <p>
+          Apple-for-PepsiCo is not a normal growth-maximizing move. It is an income-and-defense move. Apple gives exposure to a high-margin platform, the iPhone ecosystem, services, and the AI upgrade-cycle story. PepsiCo gives a sturdier consumer-staples profile and a higher dividend yield, but usually lacks the same re-rating potential.
+        </p>
+        <p>
+          So the only clean reason to do the trade is this: the investor consciously wants less growth, more dividend income, and less portfolio drama. That is a valid risk-management motive, but it is not the same as saying PepsiCo was the better total-return bet.
+        </p>
+      </article>
+
+      <aside class="card span-4">
+        <div class="kicker">One-day AI catalyst</div>
+        <div class="big green">~7.3%</div>
+        <p class="muted">
+          Apple closed at $193.12 on June 10, 2024, after the WWDC event. The next trading day, after the market digested Apple Intelligence, AAPL closed at $207.15.
+        </p>
+        <div class="math">
+          <div class="row"><span>Approx. immediate miss</span><strong>+$726 / $10k</strong></div>
+          <div class="row"><span>Event</span><strong>Apple Intelligence</strong></div>
+        </div>
+      </aside>
+
+      <article class="card span-6">
+        <div class="kicker">Rough one-year opportunity cost</div>
+        <h2>About 22–23 percentage points</h2>
+        <p>
+          A rough one-year comparison from the Apple Intelligence reveal window to June 2025 puts Apple around a modest positive total return and PepsiCo around a materially negative total return, even after dividends.
+        </p>
+        <div class="barwrap">
+          <div>
+            <div class="bar-label"><span>AAPL rough total return</span><strong>about +5.5%</strong></div>
+            <div class="bar-bg"><div class="bar-fill aaplbar"></div></div>
+          </div>
+          <div>
+            <div class="bar-label"><span>PEP rough total return</span><strong>about −17%</strong></div>
+            <div class="bar-bg"><div class="bar-fill pepbar"></div></div>
+          </div>
+        </div>
+        <p class="note">
+          On a $10,000 position, that rough spread is about $2,200–$2,300 of opportunity cost versus holding Apple.
+        </p>
+      </article>
+
+      <article class="card span-6">
+        <div class="kicker">Verdict</div>
+        <h2>The trade was defensible only as risk reduction.</h2>
+        <p>
+          If the investor needed income, lower volatility, or less concentration in mega-cap tech, then PepsiCo was a coherent defensive allocation.
+        </p>
+        <p>
+          If the investor was trying to maximize one-year total return around Apple’s AI reveal, the swap was a poor timing decision. The missed AI-driven re-rating was not theoretical; the market reaction was visible immediately.
+        </p>
+      </article>
+
+      <article class="card span-12">
+        <div class="kicker">Shareable summary</div>
+        <p>
+          <strong>Bottom line:</strong> Do not trade Apple for PepsiCo by default. Trade Apple for PepsiCo only when the goal is consciously changing the portfolio’s job: less growth, more income, more defensive stability. Around the Apple Intelligence unveil, however, waiting mattered. Apple’s one-day post-AI jump alone was worth roughly $700 per $10,000, and the rough one-year spread versus PepsiCo was about $2,200–$2,300 per $10,000.
+        </p>
+        <p class="note">
+          This page is informational analysis, not financial advice. Live chart data is supplied by TradingView and may be delayed depending on exchange rules and widget availability.
+        </p>
+      </article>
+
+      <article class="card span-12 sources">
+        <div class="kicker">Sources / references</div>
+        <ul>
+          <li>Apple Newsroom: Apple introduced Apple Intelligence on June 10, 2024.</li>
+          <li>Reuters / market reports: Apple rose about 7.3% to close at $207.15 on June 11, 2024 after the AI announcements.</li>
+          <li>Market quote snapshot used when generating this page: AAPL $311.93, PEP $142.46, as of June 4, 2026, about 17:32 UTC.</li>
+          <li>Live chart: TradingView embedded widget; requires internet access when the page is opened.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
