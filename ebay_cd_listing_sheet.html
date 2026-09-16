@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eBay CD Listing Sheet</title>
+<style>
+  :root {
+    --bg: #0e1116;
+    --panel: #171c24;
+    --panel2: #1d2430;
+    --text: #eef2f7;
+    --muted: #aeb7c4;
+    --border: #313b49;
+    --accent: #7db8ff;
+    --good: #9ee6b5;
+    --warn: #ffd98a;
+    --danger: #ffb2b2;
+    --shadow: 0 10px 26px rgba(0,0,0,.22);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  header.hero {
+    background: linear-gradient(180deg, #1b2330, #141922);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 44px); line-height: 1.05; }
+  .subtitle { color: var(--muted); margin: 0; max-width: 850px; }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .stat {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .stat b { display:block; font-size: 22px; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .controls {
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;
+  }
+  button {
+    appearance:none;
+    border:1px solid #47617f;
+    background:#22324a;
+    color:#fff;
+    padding:8px 12px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:650;
+  }
+  button:hover { background:#2b4060; }
+  .overview {
+    background: var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px;
+    margin:20px 0;
+    overflow:auto;
+  }
+  table {
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+  }
+  th, td {
+    text-align:left;
+    padding:10px 9px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  th { color:#d8e6f7; background:#1b222d; position:sticky; top:0; }
+  td:last-child, th:last-child { text-align:right; white-space:nowrap; }
+  .listing {
+    background: var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px;
+    margin:16px 0;
+    box-shadow: var(--shadow);
+  }
+  .listing-head {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:18px;
+  }
+  .item-number {
+    display:inline-block;
+    color:var(--accent);
+    font-weight:800;
+    font-size:13px;
+    margin-bottom:3px;
+  }
+  h2 { margin:0; font-size:22px; line-height:1.2; }
+  .price {
+    font-size:26px;
+    font-weight:800;
+    white-space:nowrap;
+    color:var(--good);
+  }
+  .meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px 18px;
+    color:var(--muted);
+    margin:12px 0 4px;
+    font-size:14px;
+  }
+  .field { margin-top:16px; }
+  .field-head {
+    display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:6px;
+  }
+  h3 { margin:0; font-size:14px; color:#c8d3df; text-transform:uppercase; letter-spacing:.06em; }
+  .copybox {
+    background:#0f141b;
+    border:1px solid #2e3947;
+    border-radius:10px;
+    padding:12px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .description { color:#e6ebf2; }
+  .note {
+    margin-top:14px;
+    border-left:4px solid var(--warn);
+    background:#292315;
+    color:#ffe7ad;
+    border-radius:8px;
+    padding:10px 12px;
+  }
+  .note.warning {
+    border-left-color:#ff8e8e;
+    background:#2c1719;
+    color:#ffd1d1;
+  }
+  .instructions {
+    background:#121923;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    margin:20px 0;
+    color:#dbe4ef;
+  }
+  .instructions ul { margin:8px 0 0 20px; padding:0; }
+  .fineprint { color:var(--muted); font-size:13px; margin-top:14px; }
+  .corrected { color: var(--warn); }
+  @media (max-width:700px) {
+    .stats { grid-template-columns:1fr; }
+    .listing-head { flex-direction:column; }
+    .price { font-size:24px; }
+    h2 { font-size:20px; }
+    .field-head { align-items:flex-end; }
+  }
+  @media print {
+    :root { --bg:#fff; --panel:#fff; --panel2:#fff; --text:#000; --muted:#444; --border:#bbb; --good:#000; }
+    body { background:#fff; color:#000; font-size:12px; }
+    .wrap { max-width:none; padding:0; }
+    button, .controls { display:none !important; }
+    header.hero, .overview, .listing, .instructions { box-shadow:none; break-inside:avoid; }
+    .listing { page-break-inside:avoid; }
+    .copybox { background:#fff; color:#000; }
+    .note, .note.warning { background:#fff; color:#000; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>eBay CD Listing Sheet</h1>
+  <p class="subtitle">Copy-ready titles, suggested fast-sale prices, conditions, and descriptions for the 22 CDs. Built so each title and description can be copied directly into an eBay listing.</p>
+
+  <div class="stats">
+    <div class="stat"><b>22</b><span>Total listings</span></div>
+    <div class="stat"><b>$291.78</b><span>Total asking price before shipping</span></div>
+    <div class="stat"><b>Buyer-paid</b><span>Suggested shipping setup</span></div>
+  </div>
+
+  <div class="controls">
+    <button type="button" onclick="window.print()">Print / Save as PDF</button>
+    <button type="button" onclick="copyAllTitles(this)">Copy all titles</button>
+  </div>
+
+  <p class="fineprint corrected"><strong>Arithmetic correction:</strong> the 22 suggested prices total <strong>$291.78</strong>. The earlier chat total of $290.78 was off by $1.00.</p>
+</header>
+
+<section class="instructions">
+  <strong>Before posting:</strong>
+  <ul>
+    <li>Use <strong>Like New</strong> only when the disc, artwork and included materials truly have little to no visible wear.</li>
+    <li>DragonForce should be listed <strong>Brand New</strong> while the factory seal remains intact.</li>
+    <li>Soundgarden should be graded conservatively because it is the one visibly less pristine copy.</li>
+    <li>Verify the three discs in the FFDP <strong>Iron Fist Edition</strong> before calling it complete.</li>
+    <li>Do not call Hollywood Undead <strong>Day of the Dead</strong> Deluxe or Best Buy Exclusive until its exact UPC/track list is confirmed.</li>
+    <li>Use photos of the actual item. Jewel-case scuffs should be visible rather than described as “mint.”</li>
+  </ul>
+</section>
+
+<section class="overview">
+  <h2 style="margin-bottom:12px">Quick price overview</h2>
+  <table>
+    <thead><tr><th>#</th><th>Album</th><th>Condition</th><th>Price</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Fear Factory — Digimortal</td><td>Like New</td><td>$10.99</td></tr>
+<tr><td>2</td><td>HIM — Dark Light</td><td>Like New</td><td>$11.99</td></tr>
+<tr><td>3</td><td>Oysterhead — The Grand Pecking Order</td><td>Like New</td><td>$17.99</td></tr>
+<tr><td>4</td><td>Hinder — All American Nightmare — Deluxe Edition</td><td>Like New</td><td>$9.99</td></tr>
+<tr><td>5</td><td>Tool — Ænima — Lenticular / Holographic Packaging</td><td>Like New</td><td>$19.99</td></tr>
+<tr><td>6</td><td>DragonForce — Maximum Overload — Deluxe CD + DVD — Factory Sealed</td><td>Brand New</td><td>$19.99</td></tr>
+<tr><td>7</td><td>Soundgarden — Telephantasm</td><td>Very Good</td><td>$5.99</td></tr>
+<tr><td>8</td><td>Five Finger Death Punch — American Capitalist</td><td>Like New</td><td>$7.99</td></tr>
+<tr><td>9</td><td>Five Finger Death Punch — The Wrong Side of Heaven and the Righteous Side of Hell, Vol. 1</td><td>Like New</td><td>$9.99</td></tr>
+<tr><td>10</td><td>Tool — 10,000 Days — Stereoscopic Lens Packaging</td><td>Like New</td><td>$27.99</td></tr>
+<tr><td>11</td><td>Hollywood Undead — Day of the Dead</td><td>Like New</td><td>$11.99</td></tr>
+<tr><td>12</td><td>Hollywood Undead — Desperate Measures</td><td>Like New</td><td>$12.99</td></tr>
+<tr><td>13</td><td>Hollywood Undead — American Tragedy</td><td>Like New</td><td>$10.99</td></tr>
+<tr><td>14</td><td>Hollywood Undead — American Tragedy Redux</td><td>Like New</td><td>$17.99</td></tr>
+<tr><td>15</td><td>Hollywood Undead — Notes from the Underground</td><td>Like New</td><td>$17.99</td></tr>
+<tr><td>16</td><td>Disturbed — The Sickness</td><td>Like New</td><td>$6.99</td></tr>
+<tr><td>17</td><td>Disturbed — The Lost Children</td><td>Like New</td><td>$6.99</td></tr>
+<tr><td>18</td><td>Disturbed — Indestructible</td><td>Like New</td><td>$5.99</td></tr>
+<tr><td>19</td><td>Disturbed — Believe</td><td>Like New</td><td>$4.99</td></tr>
+<tr><td>20</td><td>Five Finger Death Punch — The Way of the Fist — Iron Fist Edition</td><td>Like New</td><td>$27.99</td></tr>
+<tr><td>21</td><td>Five Finger Death Punch — The Wrong Side of Heaven and the Righteous Side of Hell, Vol. 2</td><td>Like New</td><td>$12.99</td></tr>
+<tr><td>22</td><td>Five Finger Death Punch — Got Your Six</td><td>Like New</td><td>$10.99</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+    <article class="listing" id="item-1">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#1</div>
+          <h2>Fear Factory — Digimortal</h2>
+        </div>
+        <div class="price">$10.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-1', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-1">Fear Factory Digimortal CD 2001 Roadrunner Records Industrial Metal Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-1', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-1">Very clean copy of Digimortal by Fear Factory. Disc, booklet, rear artwork and original jewel case are included and have been very well cared for. Disc appears exceptionally clean with little to no visible wear. Original artwork is crisp and complete. Please review photos for the exact copy and cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-2">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#2</div>
+          <h2>HIM — Dark Light</h2>
+        </div>
+        <div class="price">$11.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-2', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-2">HIM Dark Light CD 2005 Ville Valo Gothic Rock Metal Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-2', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-2">Very clean complete copy of HIM&#x27;s Dark Light. Includes original CD, booklet/artwork and jewel case. Disc is in excellent condition and the inserts have been very well preserved. An especially nice copy for a collection. Please see photos for exact condition and contents.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-3">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#3</div>
+          <h2>Oysterhead — The Grand Pecking Order</h2>
+        </div>
+        <div class="price">$17.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-3', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-3">Oysterhead The Grand Pecking Order CD 2001 Les Claypool Trey Anastasio</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-3', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-3">Excellent complete copy of Oysterhead&#x27;s The Grand Pecking Order. Features Les Claypool, Trey Anastasio and Stewart Copeland. Disc, original booklet/artwork and jewel case are included. Disc appears extremely clean and the packaging has been carefully stored. Please see photos for the exact copy being sold.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> Do not bargain-bin this one. It is one of the less-common titles in the group.</div>
+    </article>
+    
+    <article class="listing" id="item-4">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#4</div>
+          <h2>Hinder — All American Nightmare — Deluxe Edition</h2>
+        </div>
+        <div class="price">$9.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-4', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-4">Hinder All American Nightmare Deluxe Edition CD Enhanced 2010 Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-4', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-4">Deluxe/Enhanced edition of Hinder&#x27;s All American Nightmare. Complete with original disc, artwork and packaging. Disc is exceptionally clean and the inserts are in excellent condition. This is the expanded Deluxe Edition rather than the basic standard release. Please review photos for exact condition and edition details.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> For maximum speed, $8.99 is reasonable.</div>
+    </article>
+    
+    <article class="listing" id="item-5">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#5</div>
+          <h2>Tool — Ænima — Lenticular / Holographic Packaging</h2>
+        </div>
+        <div class="price">$19.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-5', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-5">TOOL Aenima Ænima CD 1996 Original Lenticular Holographic Case 614223108728</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-5', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-5">Very clean original copy of TOOL&#x27;s Ænima featuring the distinctive lenticular/holographic multi-image outer cover. UPC 614223108728. Includes the original CD, artwork and special lenticular packaging shown in the photos. Disc and inserts have been exceptionally well cared for. The special cover is present and is an important part of this edition. Please inspect photos for exact cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> Suggested floor: about $17–18 unless an immediate sale is more important than value.</div>
+    </article>
+    
+    <article class="listing" id="item-6">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#6</div>
+          <h2>DragonForce — Maximum Overload — Deluxe CD + DVD — Factory Sealed</h2>
+        </div>
+        <div class="price">$19.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Brand New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-6', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-6">DragonForce Maximum Overload Deluxe Edition CD DVD 2014 NEW SEALED</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-6', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-6">Brand new factory-sealed Deluxe Edition of DragonForce&#x27;s Maximum Overload. CD + bonus DVD edition in the original unopened factory packaging. UPC 039841534023. Never opened or played. Original shrink wrap remains intact. Please see photos for the exact sealed copy and condition of the exterior packaging.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> Do not open it. For a particularly fast sale, $17.99 is still reasonable.</div>
+    </article>
+    
+    <article class="listing" id="item-7">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#7</div>
+          <h2>Soundgarden — Telephantasm</h2>
+        </div>
+        <div class="price">$5.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Very Good</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-7', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-7">Soundgarden Telephantasm CD Greatest Hits Collection Chris Cornell Grunge</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-7', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-7">Soundgarden Telephantasm CD collection. This copy shows more cosmetic wear than the other CDs in this collection, so it is being priced accordingly. Includes the disc and packaging shown in the photos. Disc is sold as a playable used copy rather than collector-grade condition. Please inspect all photos closely for the exact cosmetic condition before purchasing.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> If wear is significant, $4.99 is appropriate. Confirm playback before listing.</div>
+    </article>
+    
+    <article class="listing" id="item-8">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#8</div>
+          <h2>Five Finger Death Punch — American Capitalist</h2>
+        </div>
+        <div class="price">$7.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-8', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-8">Five Finger Death Punch American Capitalist CD 2011 FFDP 5FDP Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-8', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-8">Very clean copy of Five Finger Death Punch&#x27;s American Capitalist. Complete with original CD, booklet/artwork and jewel case. Disc appears exceptionally clean and has been carefully stored. Great inexpensive copy for a FFDP collection. Please see photos for exact condition and edition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-9">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#9</div>
+          <h2>Five Finger Death Punch — The Wrong Side of Heaven and the Righteous Side of Hell, Vol. 1</h2>
+        </div>
+        <div class="price">$9.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-9', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-9">Five Finger Death Punch Wrong Side Heaven Righteous Side Hell Vol 1 CD FFDP</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-9', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-9">Excellent copy of Five Finger Death Punch&#x27;s The Wrong Side of Heaven and the Righteous Side of Hell, Volume 1. Includes original CD, booklet/artwork and case. Disc and inserts are exceptionally clean and have been well preserved. Please see photos for exact edition and cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> For fastest sale, $8.99 is reasonable.</div>
+    </article>
+    
+    <article class="listing" id="item-10">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#10</div>
+          <h2>Tool — 10,000 Days — Stereoscopic Lens Packaging</h2>
+        </div>
+        <div class="price">$27.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-10', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-10">TOOL 10,000 Days CD Original Stereoscopic Lens Glasses Packaging Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-10', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-10">Excellent complete copy of TOOL&#x27;s 10,000 Days in the original distinctive stereoscopic-lens packaging. Includes CD, integrated stereoscopic viewing lenses/glasses, artwork/booklet and original package shown in the photos. Disc and packaging have been very well cared for. This is the full special package rather than a bare replacement disc. Please inspect photos for exact condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> For a faster sale, $24.99 is a reasonable drop.</div>
+    </article>
+    
+    <article class="listing" id="item-11">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#11</div>
+          <h2>Hollywood Undead — Day of the Dead</h2>
+        </div>
+        <div class="price">$11.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-11', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-11">Hollywood Undead Day of the Dead CD 2015 HU Rock Rap Metal Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-11', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-11">Very clean copy of Hollywood Undead&#x27;s Day of the Dead. Includes original CD, artwork and packaging shown in the photos. Disc appears exceptionally clean and the inserts have been carefully stored. Please check the photos for the exact edition and track listing being sold.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note warning"><strong>Listing note:</strong> Exact edition is not fully confirmed from the photo. Do not add Deluxe or Best Buy Exclusive to the title until the UPC/track list is verified. For quicker sale, $9.99.</div>
+    </article>
+    
+    <article class="listing" id="item-12">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#12</div>
+          <h2>Hollywood Undead — Desperate Measures</h2>
+        </div>
+        <div class="price">$12.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-12', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-12">Hollywood Undead Desperate Measures CD DVD 2009 HU Complete Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-12', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-12">Excellent complete copy of Hollywood Undead&#x27;s Desperate Measures. Includes the original CD/DVD contents and packaging shown in the photos. Discs and artwork are exceptionally clean and have been carefully stored. Great copy for a Hollywood Undead collection. Please inspect photos for exact contents and condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note warning"><strong>Listing note:</strong> Verify both discs are present before using “CD DVD” and “Complete” in the listing.</div>
+    </article>
+    
+    <article class="listing" id="item-13">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#13</div>
+          <h2>Hollywood Undead — American Tragedy</h2>
+        </div>
+        <div class="price">$10.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-13', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-13">Hollywood Undead American Tragedy CD 2011 HU Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-13', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-13">Very clean complete copy of Hollywood Undead&#x27;s American Tragedy. Includes original CD, booklet/artwork and case. Disc appears exceptionally clean with the original inserts in excellent condition. Carefully stored personal collection copy. Please see photos for exact edition and condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> If the track list confirms a Deluxe Edition, add DELUXE to the title.</div>
+    </article>
+    
+    <article class="listing" id="item-14">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#14</div>
+          <h2>Hollywood Undead — American Tragedy Redux</h2>
+        </div>
+        <div class="price">$17.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-14', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-14">Hollywood Undead American Tragedy Redux CD 2011 Remix Album HU Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-14', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-14">Excellent copy of American Tragedy Redux by Hollywood Undead. This is the remix companion release to American Tragedy, not the standard album. Includes original disc, artwork and case. Disc and inserts are exceptionally clean. A less-common Hollywood Undead release and a very nice collection copy. Please see photos for exact condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> Try not to go much below about $16 unless speed is the only priority.</div>
+    </article>
+    
+    <article class="listing" id="item-15">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#15</div>
+          <h2>Hollywood Undead — Notes from the Underground</h2>
+        </div>
+        <div class="price">$17.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-15', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-15">Hollywood Undead Notes From The Underground CD 2013 HU Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-15', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-15">Very clean copy of Hollywood Undead&#x27;s Notes from the Underground. Includes original CD, artwork/booklet and packaging. Disc is exceptionally clean and the artwork has been carefully preserved. Nice collector-quality used copy. Please inspect photos for the exact edition, track listing and cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note"><strong>Listing note:</strong> If the rear track list confirms Deluxe/Unabridged, add that wording to the title.</div>
+    </article>
+    
+    <article class="listing" id="item-16">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#16</div>
+          <h2>Disturbed — The Sickness</h2>
+        </div>
+        <div class="price">$6.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-16', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-16">Disturbed The Sickness CD 2000 Down With The Sickness Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-16', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-16">Very clean copy of Disturbed&#x27;s debut album The Sickness. Includes original CD, booklet/artwork and jewel case. Disc appears exceptionally clean and the inserts have been well preserved. Please see photos for exact cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-17">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#17</div>
+          <h2>Disturbed — The Lost Children</h2>
+        </div>
+        <div class="price">$6.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-17', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-17">Disturbed The Lost Children CD 2011 B-Sides Rarities Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-17', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-17">Excellent copy of Disturbed&#x27;s The Lost Children, the band&#x27;s B-sides and rarities compilation. Includes original disc, booklet/artwork and case. Disc appears exceptionally clean and has been carefully stored. Please review photos for exact condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-18">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#18</div>
+          <h2>Disturbed — Indestructible</h2>
+        </div>
+        <div class="price">$5.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-18', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-18">Disturbed Indestructible CD 2008 David Draiman Heavy Metal Like New</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-18', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-18">Very clean copy of Disturbed&#x27;s Indestructible. Complete with original CD, artwork/booklet and jewel case. Disc is in excellent condition and the inserts are clean and complete. Please inspect photos for the exact copy being sold.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-19">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#19</div>
+          <h2>Disturbed — Believe</h2>
+        </div>
+        <div class="price">$4.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-19', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-19">Disturbed Believe CD 2002 David Draiman Heavy Metal Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-19', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-19">Excellent clean copy of Disturbed&#x27;s Believe. Includes original CD, artwork/booklet and jewel case. Disc appears exceptionally clean and the inserts have been very well cared for. Priced competitively for a quick sale. Please see photos for exact condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-20">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#20</div>
+          <h2>Five Finger Death Punch — The Way of the Fist — Iron Fist Edition</h2>
+        </div>
+        <div class="price">$27.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-20', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-20">Five Finger Death Punch Way of the Fist IRON FIST EDITION 2 CD DVD FFDP</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-20', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-20">Complete Iron Fist Edition of Five Finger Death Punch&#x27;s The Way of the Fist. Special multi-disc edition containing 2 CDs + DVD in the original expanded packaging. UPC 813985010304. Discs, artwork and package have been exceptionally well cared for. This is the Iron Fist Edition and not the ordinary single-disc release. Please see photos for all included discs and exact cosmetic condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      <div class="note warning"><strong>Listing note:</strong> CRITICAL: physically verify CD 1 + CD 2 + DVD are all present before listing. If any disc is missing, do not use this title, condition statement, or price.</div>
+    </article>
+    
+    <article class="listing" id="item-21">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#21</div>
+          <h2>Five Finger Death Punch — The Wrong Side of Heaven and the Righteous Side of Hell, Vol. 2</h2>
+        </div>
+        <div class="price">$12.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-21', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-21">Five Finger Death Punch Wrong Side Heaven Righteous Side Hell Vol 2 CD FFDP</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-21', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-21">Excellent copy of Five Finger Death Punch&#x27;s The Wrong Side of Heaven and the Righteous Side of Hell, Volume 2. Includes original CD, artwork/booklet and case. Disc and inserts are exceptionally clean and have been carefully stored. Please see photos for exact edition and condition.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+    <article class="listing" id="item-22">
+      <div class="listing-head">
+        <div>
+          <div class="item-number">#22</div>
+          <h2>Five Finger Death Punch — Got Your Six</h2>
+        </div>
+        <div class="price">$10.99</div>
+      </div>
+
+      <div class="meta">
+        <span><strong>Condition:</strong> Like New</span>
+        <span><strong>Shipping:</strong> Buyer-paid / separate</span>
+      </div>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>eBay title</h3>
+          <button type="button" onclick="copyText('title-22', this)">Copy title</button>
+        </div>
+        <div class="copybox" id="title-22">Five Finger Death Punch Got Your Six CD 2015 FFDP 5FDP Like New Complete</div>
+      </section>
+
+      <section class="field">
+        <div class="field-head">
+          <h3>Description</h3>
+          <button type="button" onclick="copyText('desc-22', this)">Copy description</button>
+        </div>
+        <div class="copybox description" id="desc-22">Very clean complete copy of Five Finger Death Punch&#x27;s Got Your Six. Includes original CD, artwork/booklet and case. Disc appears exceptionally clean and the original artwork is in excellent condition. Please inspect the photos for the exact copy being offered.<br><br>Ships carefully packed to protect the disc, case and original artwork. Photos show the actual item you will receive.</div>
+      </section>
+
+      
+    </article>
+    
+
+</div>
+
+<script>
+function copyText(id, btn) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const old = btn.textContent;
+    btn.textContent = "Copied";
+    setTimeout(() => btn.textContent = old, 1200);
+  }).catch(() => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+
+function copyAllTitles(btn) {
+  const titles = Array.from(document.querySelectorAll('[id^="title-"]'))
+    .map((el, idx) => (idx + 1) + ". " + el.innerText)
+    .join("\n");
+  navigator.clipboard.writeText(titles).then(() => {
+    const old = btn.textContent;
+    btn.textContent = "Copied all titles";
+    setTimeout(() => btn.textContent = old, 1400);
+  });
+}
+</script>
+</body>
+</html>
