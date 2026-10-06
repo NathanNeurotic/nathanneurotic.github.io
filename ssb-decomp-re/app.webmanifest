@@ -1,0 +1,8 @@
+{
+  "name": "SSB64 PS2 Asset Builder",
+  "short_name": "SSB64 Builder",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f6f4",
+  "theme_color": "#2f5d8a"
+}
